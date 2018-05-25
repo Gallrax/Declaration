@@ -7,6 +7,10 @@
 
     <!--声明注解-->
     <context:annotation-config/>
+    
+    <context:component-scan base-package="com.cxgt" >
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
 
     <!-- 引入属性文件 -->
     <context:property-placeholder location="classpath:jdbc.properties"/>

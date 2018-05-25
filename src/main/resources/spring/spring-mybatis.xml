@@ -70,12 +70,12 @@
 		<!-- Oracle需要添加该项 -->
 	    <!-- <property name="dbType" value="oracle" /> -->
 	    <!-- 全局表为下划线命名设置 true -->
-	    <!-- <property name="dbColumnUnderline" value="true" /> -->
+	     <property name="dbColumnUnderline" value="true" />
 	</bean>
 
     <!-- MyBatis 动态扫描  -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.cxgt.dao"/>
+        <property name="basePackage" value="com.cxgt.mapper"/>
     </bean>
 
     <!-- 配置事务管理 -->
