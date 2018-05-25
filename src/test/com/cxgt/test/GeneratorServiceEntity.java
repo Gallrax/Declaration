@@ -15,8 +15,9 @@ public class GeneratorServiceEntity {
     public void generateCode() {
         String packageName = "com.cxgt";
         boolean serviceNameStartWithI = false;//user -> UserService, 设置成true: user -> IUserService
-        generateByTables(serviceNameStartWithI, packageName, "user", "role", "activity", "category",
-                "permission", "resource", "role_permission", "series", "series_uid", "site", "user_role");
+//        generateByTables(serviceNameStartWithI, packageName, "user", "role", "activity", "category",
+//                "permission", "resource", "role_permission", "series", "series_uid", "site", "user_role");
+        generateByTables(serviceNameStartWithI, packageName, "user_series_status");
     }
 
     private void generateByTables(boolean serviceNameStartWithI, String packageName, String... tableNames) {

@@ -4,6 +4,7 @@ import com.cxgt.entity.Activity;
 import com.cxgt.service.ActivityService;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.theories.suppliers.TestedOn;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -24,6 +25,17 @@ public class ActivityTest {
     public void test01() {
         Activity activity = activityService.selectById(1);
         System.out.println(activity);
+    }
+
+    @Test
+    public void testEnum() {
+        System.out.println(Session_Param.ONE.toString());
+        System.out.println(Session_Param.TWO.toString());
+    }
+
+    enum Session_Param {
+        ONE,
+        TWO
     }
 
 }
