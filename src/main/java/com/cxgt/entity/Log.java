@@ -50,6 +50,10 @@ public class Log implements Serializable {
      * 执行时长
      */
 	private Integer excuteTime;
+	/**
+	 * 是否为管理员
+	 */
+	private String ip;
     /**
      * 是否为管理员
      */
@@ -130,6 +134,14 @@ public class Log implements Serializable {
 
 	public void setExcuteTime(Integer excuteTime) {
 		this.excuteTime = excuteTime;
+	}
+
+	public String getIp() {
+		return ip;
+	}
+
+	public void setIp(String ip) {
+		this.ip = ip;
 	}
 
 	public Integer getIsAdmin() {

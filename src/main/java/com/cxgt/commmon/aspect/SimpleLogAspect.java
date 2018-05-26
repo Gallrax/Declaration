@@ -1,6 +1,7 @@
 package com.cxgt.commmon.aspect;
 
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.extra.servlet.ServletUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.cxgt.entity.Log;
@@ -16,7 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.jmx.export.assembler.MethodNameBasedMBeanInfoAssembler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -58,8 +62,10 @@ public class SimpleLogAspect {
         String methodName = joinPoint.getSignature().getName();//获取方法名
         Object[] args = joinPoint.getArgs();//获取参数
         long begin = System.currentTimeMillis();
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        String ip = ServletUtil.getClientIP(request);
         logger.info(" ---------- Controller begin className : " + className + ", methodName : " + methodName + ", args : " + Arrays.asList(args) + "; -----------");
-        newLog(className, methodName, Arrays.asList(args).toString(), new Date(begin), 0);//自动放置ThreadLocal
+        newLog(className, methodName, Arrays.asList(args).toString(), new Date(begin), ip, 0);//自动放置ThreadLocal
         Object result = joinPoint.proceed();
         long end = System.currentTimeMillis();
         setLog(JSON.toJSONString(result), new Date(end), null);//自动设置ThreadLocal中的log
@@ -97,10 +103,11 @@ public class SimpleLogAspect {
      * @param:
      * @return:
      */
-    private void newLog(String className, String methodName, String param, Date beginTime, Integer isAdmin) {
+    private void newLog(String className, String methodName, String param, Date beginTime, String ip, Integer isAdmin) {
         Log log = new Log();
         log.setClassName(className);
         log.setMethodName(methodName);
+        log.setParam(param);
         log.setBeginTime(beginTime);
         log.setInsertTime(new Date());
         threadLocal.set(log);
