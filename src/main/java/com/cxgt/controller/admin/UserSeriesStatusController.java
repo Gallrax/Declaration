@@ -1,7 +1,6 @@
-package com.cxgt.controller;
+package com.cxgt.controller.admin;
 
 
-import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
@@ -15,9 +14,7 @@ import org.springframework.stereotype.Controller;
  * @since 2018-05-25
  */
 @Controller
-@RequestMapping("/activity")
-public class ActivityController {
-
-    private static final Logger logger = Logger.getLogger(ActivityController.class);
-
+@RequestMapping("/userSeriesStatus")
+public class UserSeriesStatusController {
+	
 }

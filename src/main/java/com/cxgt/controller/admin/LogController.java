@@ -1,4 +1,4 @@
-package com.cxgt.controller;
+package com.cxgt.controller.admin;
 
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,10 +11,10 @@ import org.springframework.stereotype.Controller;
  * </p>
  *
  * @author Gallrax
- * @since 2018-05-25
+ * @since 2018-05-26
  */
 @Controller
-@RequestMapping("/userSeriesStatus")
-public class UserSeriesStatusController {
+@RequestMapping("/log")
+public class LogController {
 	
 }
