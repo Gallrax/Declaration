@@ -110,6 +110,8 @@ public class SimpleLogAspect {
         log.setParam(param);
         log.setBeginTime(beginTime);
         log.setInsertTime(new Date());
+        log.setIp(ip);
+        log.setIsAdmin(isAdmin);
         threadLocal.set(log);
     }
 
