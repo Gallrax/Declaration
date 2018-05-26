@@ -1,8 +1,12 @@
 package com.cxgt.controller.admin;
 
 
+import com.alibaba.fastjson.JSON;
 import com.cxgt.commmon.annotaion.SimpleLog;
 import com.cxgt.commmon.constants.GlobalConstant;
+import com.cxgt.commmon.constants.ResultCodeEnum;
+import com.cxgt.commmon.util.ResultUtil;
+import com.cxgt.commmon.vo.Result;
 import com.cxgt.entity.Site;
 import com.cxgt.entity.User;
 import com.cxgt.service.UserService;
@@ -16,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,9 +44,9 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @RequestMapping("/login")
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
-    public String login(String username, String password, HttpSession session) {
+    public Result login(String username, String password, HttpSession session) {
         username = "tom";
         password = "tom";
         Site site = new Site();
@@ -49,7 +54,16 @@ public class UserController {
         session.setAttribute(GlobalConstant.SESSION_SITE, site);
         UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(username, password);
         SecurityUtils.getSubject().login(usernamePasswordToken);
-        return "login";
+        String json = JSON.toJSONString(ResultCodeEnum.SUCCESS);
+        return ResultUtil.ok();
+    }
+
+    @RequestMapping("/logout")
+    @ResponseBody
+    @SimpleLog
+    public Result logout() {
+        SecurityUtils.getSubject().logout();
+        return ResultUtil.ok();
     }
 
     @RequestMapping("/users")

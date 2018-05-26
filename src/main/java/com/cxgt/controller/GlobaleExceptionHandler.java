@@ -31,7 +31,7 @@ public class GlobaleExceptionHandler {
     public String unauthorizedException(UnauthorizedException e) {
         logger.error(" unauthorizedException : " + e.getMessage());
 //        e.printStackTrace();
-        return "/admin/unauthorized";
+        return "admin/login/login";
     }
 
     /**
@@ -45,7 +45,7 @@ public class GlobaleExceptionHandler {
     public String unauthenticatedException(UnauthenticatedException e) {
         logger.error(" unauthenticatedException : " + e.getMessage());
 //        e.printStackTrace();
-        return "/admin/unauthorized";
+        return "admin/login/login";
     }
 
     @ExceptionHandler(Exception.class)

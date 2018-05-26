@@ -18,6 +18,9 @@
         <property name="filterChainDefinitions">
             <value>
                 /admin/user/login = anon
+                /admin/user/logout =logout
+                /static/** = anon
+                /admin/**.js = anon
                 /admin/* = authc
             </value>
         </property>

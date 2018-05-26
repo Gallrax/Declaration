@@ -7,9 +7,12 @@
 
     <mvc:default-servlet-handler/>
 
+    <mvc:resources mapping="/static/**" location="/static/"/>
+
     <context:component-scan base-package="com.cxgt.controller">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
-        <context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+        <context:include-filter type="annotation"
+                                expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
     </context:component-scan>
 
     <!-- 开启注解AOP -->

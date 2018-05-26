@@ -14,7 +14,12 @@ public class IndexController {
 
     @RequestMapping("/login.html")
     public String login() {
-        return "admin/login";
+        return "/admin/login/login";
+    }
+
+    @RequestMapping(value = {"/index.html", "/"})
+    public String index() {
+        return "/admin/index";
     }
 
 }
