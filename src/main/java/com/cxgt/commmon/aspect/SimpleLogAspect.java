@@ -3,7 +3,6 @@ package com.cxgt.commmon.aspect;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.extra.servlet.ServletUtil;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.cxgt.entity.Log;
 import com.cxgt.service.LogService;
 import org.apache.log4j.Logger;
@@ -15,7 +14,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
-import org.springframework.jmx.export.assembler.MethodNameBasedMBeanInfoAssembler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -26,7 +24,7 @@ import java.util.Date;
 
 /**
  * @Author: 冯冠凯
- * @Description:
+ * @Description: 简单日志记录
  * @Date: Created on 2017/11/16
  * @Version: 1.0
  */

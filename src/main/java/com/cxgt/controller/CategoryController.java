@@ -4,6 +4,7 @@ package com.cxgt.controller;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.cxgt.commmon.annotaion.SimpleLog;
 import com.cxgt.commmon.controller.BaseController;
+import com.cxgt.commmon.util.ResultUtil;
 import com.cxgt.commmon.vo.Result;
 import com.cxgt.entity.Category;
 import com.cxgt.entity.Site;
@@ -20,7 +21,7 @@ import java.util.List;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author Gallrax
@@ -30,7 +31,7 @@ import java.util.List;
 @RequestMapping("/category")
 public class CategoryController extends BaseController {
 
-    private static final Logger logger = Logger.getLogger(CategoryController.class);
+    private static final Logger LOG = Logger.getLogger(CategoryController.class);
     @Autowired
     CategoryService categoryService;
 
@@ -49,7 +50,11 @@ public class CategoryController extends BaseController {
         Site site = getSite(request);
 //        暂时不考虑优化查询并只支持二级分类(后期可考虑查询所有分类，通过递归方式排树)
         List<Category> categories = categoryService.selectList(new EntityWrapper<Category>().eq("siteId", site.getId()).eq("lv", 1));
-        return null;
+        for (Category category : categories) {
+            List<Category> children = categoryService.selectList(new EntityWrapper<Category>().eq("pid", category.getId()));
+            category.setChildren(children);
+        }
+        return ResultUtil.ok(categories);
     }
-	
+
 }

@@ -1,9 +1,7 @@
 package com.cxgt.controller;
 
-import com.cxgt.entity.Log;
+import com.cxgt.commmon.exception.PassportValidateException;
 import org.apache.log4j.Logger;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -18,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @ControllerAdvice
 public class GlobaleExceptionHandler {
 
-    private static final Logger logger = Logger.getLogger(GlobaleExceptionHandler.class);
+    private static final Logger LOG = Logger.getLogger(GlobaleExceptionHandler.class);
 
     /**
      * @author: Gallrax
@@ -29,7 +27,7 @@ public class GlobaleExceptionHandler {
      */
     @ExceptionHandler(UnauthorizedException.class)
     public String unauthorizedException(UnauthorizedException e) {
-        logger.error(" unauthorizedException : " + e.getMessage());
+        LOG.error(" unauthorizedException : " + e.getMessage());
 //        e.printStackTrace();
         return "admin/login/login";
     }
@@ -43,9 +41,16 @@ public class GlobaleExceptionHandler {
      */
     @ExceptionHandler(UnauthenticatedException.class)
     public String unauthenticatedException(UnauthenticatedException e) {
-        logger.error(" unauthenticatedException : " + e.getMessage());
+        LOG.error(" unauthenticatedException : " + e.getMessage());
 //        e.printStackTrace();
         return "admin/login/login";
+    }
+
+    @ExceptionHandler(PassportValidateException.class)
+    public String passportValidateException(PassportValidateException e) {
+        LOG.error(" Passport validate is not pass !");
+        //此处许判断是否为ajax请求
+        return null;
     }
 
     @ExceptionHandler(Exception.class)

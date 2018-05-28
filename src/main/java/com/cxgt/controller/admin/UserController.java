@@ -39,7 +39,7 @@ import java.util.List;
 @RequestMapping("/admin/user")
 public class UserController {
 
-    private static final Logger logger = Logger.getLogger(UserController.class);
+    private static final Logger LOG = Logger.getLogger(UserController.class);
 
     @Autowired
     UserService userService;

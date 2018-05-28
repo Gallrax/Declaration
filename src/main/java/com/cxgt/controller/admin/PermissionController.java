@@ -1,6 +1,7 @@
 package com.cxgt.controller.admin;
 
 
+import com.cxgt.commmon.controller.BaseController;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,6 @@ import org.springframework.stereotype.Controller;
  */
 @Controller
 @RequestMapping("/permission")
-public class PermissionController {
+public class PermissionController extends BaseController {
 	
 }

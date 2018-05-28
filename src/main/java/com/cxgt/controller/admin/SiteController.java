@@ -1,9 +1,9 @@
 package com.cxgt.controller.admin;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
-
+import com.cxgt.commmon.controller.BaseController;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * <p>
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Controller;
  */
 @Controller
 @RequestMapping("/site")
-public class SiteController {
+public class SiteController extends BaseController {
 	
 }

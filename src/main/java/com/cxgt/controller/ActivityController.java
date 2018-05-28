@@ -2,6 +2,7 @@ package com.cxgt.controller;
 
 
 import com.cxgt.commmon.annotaion.SimpleLog;
+import com.cxgt.commmon.controller.BaseController;
 import com.cxgt.commmon.vo.Result;
 import com.cxgt.service.ActivityService;
 import org.apache.log4j.Logger;
@@ -24,16 +25,16 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Controller
 @RequestMapping("/activity")
-public class ActivityController {
+public class ActivityController extends BaseController {
 
-    private static final Logger logger = Logger.getLogger(ActivityController.class);
+    private static final Logger LOG = Logger.getLogger(ActivityController.class);
     @Autowired
     private ActivityService activityService;
 
     @SimpleLog
-    @RequestMapping("/activitys")
+    @RequestMapping("/activities")
     @ResponseBody
-    public Result activitys(Integer categoryId,
+    public Result activities(Integer categoryId,
                             String search,
                             HttpServletRequest request) {
 

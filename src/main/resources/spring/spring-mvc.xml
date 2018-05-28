@@ -16,6 +16,13 @@
     </context:component-scan>
 
     <!-- 开启注解AOP -->
+    
+    <mvc:interceptors>
+        <mvc:interceptor >
+            <mvc:mapping path="/**"/>
+            <bean class="com.cxgt.interceptor.SiteInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
     <aop:aspectj-autoproxy proxy-target-class="true"/>
 
     <!-- FastJson注入 -->

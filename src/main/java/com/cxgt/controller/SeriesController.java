@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/series")
 public class SeriesController extends BaseController {
 
-    private static final Logger logger = Logger.getLogger(SeriesController.class);
+    private static final Logger LOG = Logger.getLogger(SeriesController.class);
     @Autowired
     private SeriesService seriesService;
 

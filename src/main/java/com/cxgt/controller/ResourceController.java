@@ -2,7 +2,9 @@ package com.cxgt.controller;
 
 
 import com.cxgt.commmon.annotaion.SimpleLog;
+import com.cxgt.commmon.controller.BaseController;
 import com.cxgt.commmon.vo.Result;
+import com.sun.xml.internal.rngom.parse.host.Base;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
@@ -18,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @RequestMapping("/resource")
-public class ResourceController {
+public class ResourceController extends BaseController {
 
     @SimpleLog
     @RequestMapping("/resources")
