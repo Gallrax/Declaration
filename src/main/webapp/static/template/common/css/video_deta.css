@@ -1,0 +1,106 @@
+@charset "utf-8";
+/* CSS Document */
+html{ width:100%; height:100%; overflow:hidden;}
+body{ width:100%; height:100%; background:#323c4c;}
+
+
+.videoBox{ position:absolute; top:0; left:0; bottom:0; right:0;}
+.videoBox .py_cg{ width:9px; background:#242d3c; border-left:solid #1a2332 2px; position:absolute; height:100%; top:0; left:153px;}
+.videoBox .py_back{ width:86px; height:27px; background:url(../images/play.png) no-repeat 0 0; position:absolute; top:19px; left:17px; padding-left:20px; line-height:27px; color:#b3b3b3; font-family:"宋体";}
+
+.videoBox .py_pre{ height:38px; background:url(../images/play.png) no-repeat 0 -32px; line-height:38px; display:block; position:absolute; left:139px; top:10px; padding-left:48px; color:#acb5c4; font-size:14px;}
+.videoBox .py_pre:hover{ color:#c60000;}
+
+.videoBox .py_next{ height:38px; background:url(../images/play.png) no-repeat 0 -75px; line-height:38px; display:block; position:absolute; left:139px; bottom:10px; padding-left:48px; color:#acb5c4; font-size:14px;}
+.videoBox .py_next:hover{ color:#c60000;}
+
+.videoBox .py_thide{ height:69px; background:url(../images/play.png) no-repeat 0 -119px; line-height:69px; display:block; position:absolute; left:124px; top:67px; color:#f4f8ff; font-size:16px;}
+.videoBox .py_thide span{ width:69px; height:69px; text-align:center; color:#f06273; display:block; float:left; margin-right:10px;}
+
+.videoBox .videoPlay{ position:absolute; top:150px; left:70px; bottom:80px; right:70px; background:#104614;}
+
+.videoBox .py_leftbtn{ background:url(../images/play.png) no-repeat -23px -192px; width:18px; height:30px; overflow:hidden; position:absolute; top:50%; right:0; margin-top:-15px; cursor:pointer;}
+.videoBox .py_rightbtn{ background:url(../images/play.png) no-repeat 0 -192px;}
+
+
+
+
+.dire{ width:395px; background:#eee; position:absolute; top:0px; bottom:0; right:0;}
+.dire .intro{ height:110px; padding:5px 0 0 20px;}
+.dire .intro h4{ font-size:16px; line-height:26px;}
+.dire .intro h4 a{ color:#292d33;}
+.dire .intro h4 a:hover{ color:#c60000;}
+.dire .intro p{ line-height:22px; color:#292d33;}
+.dire .intro .score{ height:20px; line-height:20px; margin:0 0 6px 0;}
+.dire .intro .score .star{width:75px; height:14px; background:url(../images/icon_star1.png) no-repeat; float:left; margin:3px 7px 0 0px; display:block; overflow:hidden;}
+.dire .intro .score .s0{background-position:0px 0;}
+.dire .intro .score .s1{background-position:0px -14;}
+.dire .intro .score .s2{background-position:0px -28px;}
+.dire .intro .score .s3{background-position:0px -42px;}
+.dire .intro .score .s4{background-position:0px -56px;}
+.dire .intro .score .s5{background-position:0px -70px;}
+.dire .intro .score .num {color:#555;font-family: Tahoma;}
+
+
+.dire .ctory{ background:#242d3c; height:46px; padding-left:15px; line-height:46px;}
+.dire .ctory a{ display:block; float:left; width:126px; height:46px; color:#c9cacc; font-size:14px; position:relative;}
+.dire .ctory a.cur{ color:#f06273;}
+.dire .ctory b{ background:url(../images/play.png) no-repeat; display:block; overflow:hidden; float:left;}
+.dire .ctory .cy_1{ background-position:0 -227px; width:14px; height:13px; margin:17px 6px 0 38px;}
+.dire .ctory a.cur .cy_1{ background-position:0 -245px;}
+.dire .ctory .cy_2{ background-position:-19px -227px; width:14px; height:15px; margin:16px 6px 0 38px;}
+.dire .ctory a.cur .cy_2{ background-position:-19px -245px;}
+.dire .ctory .cy_3{ background-position:-38px -227px; width:16px; height:13px; margin:17px 6px 0 38px;}
+.dire .ctory a.cur .cy_3{ background-position:-38px -245px;}
+.dire .ctory a.cur span{ background:url(../images/play.png) no-repeat 0 -270px; width:10px; height:5px; display:block; overflow:hidden; position:absolute; left:50%; top:46px; margin-left:-5px;}
+
+
+
+.ctory_text{ position:absolute; top:161px; right:0; bottom:0; width:395px; overflow:hidden; overflow-y:auto;}
+.ctory_text ul{ padding:16px 17px 0 17px;}
+.ctory_text li{ height:24px; line-height:24px;}
+.ctory_text li a{ color:#666;}
+.ctory_text li a b{ background:url(../images/play.png) no-repeat 0 -280px; width:14px; height:14px; float:left; display:block; overflow:hidden; margin:5px 6px 0 0;}
+.ctory_text li a:hover,.ctory_text li.cur a{ color:#f06273;}
+.ctory_text li a:hover b,.ctory_text li.cur a b{ background:url(../images/play.png) no-repeat -19px -280px;}
+
+.notes{ position:absolute; top:161px; right:0; bottom:0; width:367px; padding:4px 14px 0 14px;}
+.notes_top{ height:42px; line-height:42px; font-size:14px;}
+.notes_top a{ float:left; width:106px; height:42px; overflow:hidden; display:block; color:#838689;}
+.notes_top a b{ background:url(../images/play.png) no-repeat; float:left; display:block; overflow:hidden;}
+.notes_top a .ts_1{ background-position:0 -345px; width:16px; height:16px; margin:13px 6px 0 12px;}
+.notes_top a .ts_2{ background-position:-21px -345px; width:8px; height:14px; margin:14px 6px 0 18px;}
+.notes_top a.cur{ background:url(../images/play.png) no-repeat 0 -298px; color:#292d33;}
+.notes_bottom{zoom:1; overflow:hidden; margin-top:10px;}
+.notes_bottom label{ width:355px; display:block; border:solid #a6a8a9 1px; background:#FFF; height:60px; padding:5px; margin-bottom:10px;}
+.notes_bottom label textarea{ width:355px; height:60px; border:0; background:none; font:12px/20px "微软雅黑";}
+.notes_bottom span{ float:left; background:url(../images/play.png) no-repeat 0 -366px; width:43px; height:20px; line-height:20px; padding-left:20px; text-align:center; color:#838689; display:block;}
+.notes_bottom .bnt{ width:78px; height:30px; float:right; background:#f06273; border:0 none; border-radius:4px; font:14px/30px "微软雅黑"; color:#FFF;}
+.notes_list{ position:absolute; top:180px; right:0; bottom:0; width:395px; overflow-y:auto;}
+.notes_list ul{ margin:0 17px;}
+.notes_list li{ line-height:20px; padding:20px 0; border-top:solid #d8d8d8 1px;}
+.notes_list li .vd{ background:url(../images/play.png) no-repeat 0 -391px; width:43px; height:20px; line-height:20px; padding-left:20px; text-align:center; color:#838689; display:block; margin-bottom:10px;}
+.notes_list li .rightF{ color:#b3b5b8;}
+
+.comments{ position:absolute; top:136px; right:0; bottom:0; width:395px; overflow-y:auto;}
+.comments ul{ margin:0 17px;}
+.comments li img{ float:left; border-radius:3px;}
+.comments li h4{ padding-left:40px;}
+.comments li h4 a{ color:#0088c1;}
+.comments li h4 a:hover{ color:#c60000;}
+.comments li p{ padding-left:40px; line-height:18px;}
+.comments li{ line-height:20px; padding:20px 0; border-top:solid #d8d8d8 1px;}
+.comments li .rightF{ color:#b3b5b8;}
+
+.Mohpy,.notes_text{ display:none;}
+
+
+
+
+
+
+
+
+
+
+

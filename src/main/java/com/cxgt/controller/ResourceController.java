@@ -1,9 +1,12 @@
 package com.cxgt.controller;
 
 
+import com.cxgt.commmon.annotaion.SimpleLog;
+import com.cxgt.commmon.vo.Result;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * <p>
@@ -16,5 +19,12 @@ import org.springframework.stereotype.Controller;
 @Controller
 @RequestMapping("/resource")
 public class ResourceController {
+
+    @SimpleLog
+    @RequestMapping("/resources")
+    @ResponseBody
+    public Result resources() {
+        return null;
+    }
 	
 }

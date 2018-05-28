@@ -1,4 +1,4 @@
-package com.cxgt.controller;
+package com.cxgt.controller.admin;
 
 
 import org.springframework.web.bind.annotation.RequestMapping;

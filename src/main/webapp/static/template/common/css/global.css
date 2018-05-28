@@ -1,0 +1,74 @@
+@charset "utf-8";
+/* CSS Document */
+*{margin:0px; padding:0px;}
+body{font:12px/1.5 Microsoft YaHei,SimSun, Arial, Helvetica, sans-serif; color:#333; background:#FFF;}
+img{border:0px;}
+ul,ol{list-style-type:none;}
+h1,h2,h3,h4,h5,h6{ font-weight:normal;}
+table {border-collapse: collapse;border-spacing: 0;}
+input,select,textarea{vertical-align:middle; outline:none; resize:none; font-family:Microsoft YaHei;}
+a{color:#333; text-decoration:none;}
+a:hover{color:#38adff;}
+.clearfix{zoom:1; overflow:hidden;}
+.clear{ clear:both; font-size:0; height:0; line-height:0;}
+.leftF{float:left;}
+.rightF{float:right;}
+.icons{ font-size:0px; text-indent:-9999999px; overflow:hidden; display:block;}
+/*********************************************/
+body{ background:#e1e2e6;}
+.wrap1080{ width:1080px; margin:0 auto;}
+/*header*/
+.header{ background:url(../images/header_bd.png) repeat-x center top; padding:0 0 10px;}
+.head{ height:60px;}
+.logo{ height:26px; padding:17px 0 0;}
+.logo img{ height:26px; display:block;}
+.nav{ font-size:16px; margin-left:70px;}
+.nav li{ padding:1px 40px 0 0; height:59px; float:left;}
+.nav li a{ color:#333; display:block; height:56px; line-height:56px; padding:0 10px;}
+.nav li.current a{ color:#38adff; border-bottom:solid #38adff 3px;}
+.exit{ line-height:60px;}
+/*footer*/
+.footer{ text-align:center; line-height:24px; padding:20px 0;}
+/*mian*/
+.main_box{ background:#FFF url(../images/main_left_bd.png) repeat-y left top; margin-top:10px; min-height:912px;}
+.main_left{ width:260px;}
+.main_right{ width:800px;}
+/*main_left*/
+.declare_content{ padding:20px 0 0 0;}
+.declare_fic,.declare_all{ width:144px; height:36px; line-height:36px; background:#62b4fe; text-align:center; font-size:14px; color:#FFF; border-radius:2px; margin:0 auto;}
+.declare_all{ width:auto; margin-top:20px; text-align:left; padding:0 25px;}
+.declare_class{ padding:0 0 0 10px;}
+.declare_cell{ line-height:36px; font-size:14px;}
+.declare_cell .title_row{ display:block; color:#333; background:url(../images/declare_icons.png) no-repeat 10px 0; overflow:hidden; padding:0 0 0 30px; position:relative;}
+.declare_cell ul{ padding:0 0 0 10px; display:none;}
+.declare_cell li a{ display:block; padding:0 20px; color:#666; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;}
+.declare_cell li a:hover{ color:#38adff;}
+.declare_cell .clare_add{ display:none;}
+.declare_cell_active .clare_add{ background:url(../images/xiala_ico.png) no-repeat; width:16px; height:16px; display:block; overflow:hidden; position:absolute; top:50%; right:10px; margin-top:-8px;}
+
+
+
+.declare_cell_active .title_row{ background:#38adff url(../images/declare_icons.png) no-repeat 10px -36px; color:#FFF;}
+.declare_cell_active ul{ display:block;}
+.declare_cell_active .current{ background:#e1e2e6;}
+.declare_cell_active .current a{ color:#38adff;}
+
+
+/*分页*/
+.pagination{text-align:center; margin-top:20px;}
+.pagination a,.pagination b{display:inline-block; vertical-align:top; background:#e1e2e6; height:30px; line-height:30px;color:#000; margin-right:4px; padding:0px 11px; border-radius:4px;}
+.pagination a:hover,.pagination .cur{ background-color:#38adff; color:#fff;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

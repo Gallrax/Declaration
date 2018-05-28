@@ -26,4 +26,8 @@ public abstract class BaseController {
         return null;
     }
 
+    protected String toPage(HttpServletRequest request, String value) {
+        return "template/" + getSite(request).getTemplate() + "/" + value;
+    }
+
 }

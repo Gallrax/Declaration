@@ -18,6 +18,10 @@ public class ResultUtil {
         return new Result(ResultCodeEnum.SUCCESS.value(), ResultCodeEnum.SUCCESS.getMessage(), o);
     }
 
+    public static Result ok(Object o, String message) {
+        return new Result(ResultCodeEnum.SUCCESS.value(), message, o);
+    }
+
     public static Result fail(ResultCodeEnum resultCodeEnum) {
         return fail(resultCodeEnum, null);
     }

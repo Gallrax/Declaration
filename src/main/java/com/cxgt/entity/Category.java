@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import java.util.Date;
 import com.baomidou.mybatisplus.enums.IdType;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * <p>
@@ -62,6 +63,8 @@ public class Category implements Serializable {
      * 站点id
      */
 	private Integer siteId;
+
+	private List<Category> children;
 
 
 	public Integer getId() {
@@ -150,6 +153,14 @@ public class Category implements Serializable {
 
 	public void setSiteId(Integer siteId) {
 		this.siteId = siteId;
+	}
+
+	public List<Category> getChildren() {
+		return children;
+	}
+
+	public void setChildren(List<Category> children) {
+		this.children = children;
 	}
 
 	@Override
