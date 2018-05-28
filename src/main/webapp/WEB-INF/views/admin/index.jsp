@@ -36,11 +36,11 @@
         <div class="navBar layui-side-scroll">
             <ul class="layui-nav layui-nav-tree" lay-filter="tempNav">
                 <li class="layui-nav-item layui-nav-itemed">
-                    <a href="javascript:;" data-url="page/main.html">后台首页1</a>
+                    <a href="javascript:;">后台首页1</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="/admin/login.html">A</a></dd>
-                        <dd><a>B</a></dd>
-                        <dd><a>C</a></dd>
+                        <dd><a href="javascript:;" data-url="page/main.html">A</a></dd>
+                        <dd><a href="javascript:;" data-url="page/main.html">B</a></dd>
+                        <dd><a href="javascript:;" data-url="page/main.html">C</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item layui-nav-itemed">
@@ -67,10 +67,9 @@
     <div class="layui-body" style="bottom: 0;border-left: solid 2px #1AA094;" id="admin-body">
         <div class="layui-tab admin-nav-card layui-tab-brief" lay-filter="admin-tab" lay-allowclose="true">
             <ul class="layui-tab-title">  <!-- tab选项卡标题 -->
-                <li class="layui-this">
-                    <i class="fa fa-dashboard" aria-hidden="true"></i>
-                    <cite>控制面板</cite>
-                </li>
+                <li class="layui-this" lay-id="1">Aa</li>
+                <li lay-id="2">Bb</li>
+                <li lay-id="3">Cc</li>
             </ul>
             <div class="layui-tab-content" style="min-height: 150px; padding: 5px 0 0 0;">  <!-- tab选项卡内容 -->
                 <div class="layui-tab-item layui-show">
@@ -90,18 +89,29 @@
 <script src="/static/tools/layui/layui.js"></script>
 <script>
     //JavaScript代码区域
-    layui.use(['element', 'bodyTab'], function () {
+    layui.use(['element'], function () {
         var $ = layui.jquery;
         var element = layui.element;
-        var tab = layui.bodyTab({
-            openTabNum: "50",  //最大可打开窗口数量
-            url: "json/navs.json" //获取菜单json地址
-        });
 
         //监听导航点击
         element.on('nav(tempNav)', function (elem) {
-            console.log(elem);
+            var url = (elem).attr("data-url");
+            console.log(url);
+            if (url != null) {
+                console.log("-");
+                element.tabAdd('demo', {
+                    title: 'new tab',
+                    content: 'new tab content',
+                }).call(elem);
+                element.tabChange('demo', 1);
+            }
         });
 
+        /*$(".layui-nav-child a").click(function (e) {
+            console.log(e);
+            var url = $(this).attr("data-url");
+            console.log(url);
+        });*/
     });
+
 </script>

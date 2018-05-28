@@ -41,4 +41,27 @@
 </body>
 </html>
 <script type="text/javascript" src="/static/tools/layui/layui.js"></script>
-<script type="text/javascript" src="/static/admin/js/data/login.js"></script>
+<script>
+    layui.use('form', function () {
+        var $ = layui.jquery;
+        var form = layui.form;
+        form.on('submit(login)', function(data){
+            console.log(data.field);
+            $.ajax({
+                url: "/admin/user/login",
+                data: data.field,
+                type: "post",
+                success: function (data) {
+                    var result = $.parseJSON(data);
+                    if (result.code == 200) {
+                        location.href = "/admin/index.html";
+                    } else {
+                        layer.msg("登录失败");
+                    }
+                }
+
+            });
+            return false;
+        });
+    });
+</script>
