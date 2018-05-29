@@ -25,8 +25,30 @@ public class IndexController extends BaseController {
         return toPage(request, "activities");
     }
 
+    @RequestMapping("/activityInfo.html")
+    public String activityInfo(HttpServletRequest request) {
+        return toPage(request, "activity");
+    }
+
+    @RequestMapping("/activityUsers.html")
+    public String activityUsers(HttpServletRequest request) {
+        return toPage(request, "activityUsers");
+    }
+
+
     @RequestMapping("/series.html")
     public String series(HttpServletRequest request) {
         return toPage(request, "series");
     }
+
+    @RequestMapping("/seriesInfo.html")
+    public String seriesInfo(HttpServletRequest request) {
+        return toPage(request, "series");
+    }
+
+    @RequestMapping("/addSeries.html")
+    public String addSeries(HttpServletRequest request) {
+        return toPage(request, "addSeries");
+    }
+
 }
