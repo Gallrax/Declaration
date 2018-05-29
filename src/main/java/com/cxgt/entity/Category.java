@@ -1,5 +1,6 @@
 package com.cxgt.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import java.util.Date;
 import com.baomidou.mybatisplus.enums.IdType;
@@ -64,6 +65,7 @@ public class Category implements Serializable {
      */
 	private Integer siteId;
 
+	@TableField(exist = false)
 	private List<Category> children;
 
 

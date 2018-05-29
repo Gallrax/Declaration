@@ -1,6 +1,7 @@
 package com.cxgt.controller;
 
 
+import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.cxgt.commmon.annotaion.SimpleLog;
 import com.cxgt.commmon.controller.BaseController;
@@ -11,6 +12,7 @@ import com.cxgt.entity.Site;
 import com.cxgt.service.CategoryService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
@@ -38,9 +40,8 @@ public class CategoryController extends BaseController {
     @SimpleLog
     @RequestMapping("/categorys")
     @ResponseBody
-    public List<Category> categorys() {
-        List<Category> categories = categoryService.selectList(null);
-        return categories;
+    public Result<Category> categorys(HttpServletRequest request) {
+        return null;
     }
 
     @SimpleLog
@@ -48,13 +49,20 @@ public class CategoryController extends BaseController {
     @ResponseBody
     public Result tree(HttpServletRequest request) {
         Site site = getSite(request);
-//        暂时不考虑优化查询并只支持二级分类(后期可考虑查询所有分类，通过递归方式排树)
-        List<Category> categories = categoryService.selectList(new EntityWrapper<Category>().eq("siteId", site.getId()).eq("lv", 1));
-        for (Category category : categories) {
-            List<Category> children = categoryService.selectList(new EntityWrapper<Category>().eq("pid", category.getId()));
-            category.setChildren(children);
-        }
+        Category category = categoryService.selectOne(new EntityWrapper<Category>().eq("site_id", site.getId()).eq("lv", 0));
+        List<Category> categories = categoryService.selectChildrenByPid(category.getId());
+        category.setChildren(categories);
         return ResultUtil.ok(categories);
+    }
+
+    @SimpleLog
+    @RequestMapping("/{id}")
+    @ResponseBody
+    public Result category(@PathVariable Integer id, HttpServletRequest request) {
+        Site site = getSite(request);
+        Category category = categoryService.selectById(id);
+        Assert.isFalse(category.getSiteId().equals(site.getId()));
+        return ResultUtil.ok(category);
     }
 
 }
