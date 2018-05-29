@@ -17,7 +17,7 @@ public class GeneratorServiceEntity {
         boolean serviceNameStartWithI = false;//user -> UserService, 设置成true: user -> IUserService
 //        generateByTables(serviceNameStartWithI, packageName, "user", "role", "activity", "category",
 //                "permission", "resource", "role_permission", "series", "series_uid", "site", "user_role");
-        generateByTables(serviceNameStartWithI, packageName, "log");
+        generateByTables(serviceNameStartWithI, packageName, "activity_uid");
     }
 
     private void generateByTables(boolean serviceNameStartWithI, String packageName, String... tableNames) {
