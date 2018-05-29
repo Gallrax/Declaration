@@ -12,5 +12,7 @@ import com.baomidou.mybatisplus.service.IService;
  * @since 2018-05-25
  */
 public interface ActivityService extends IService<Activity> {
+
+    void addClick(Integer activityId);
 	
 }

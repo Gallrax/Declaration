@@ -12,5 +12,7 @@ import com.baomidou.mybatisplus.service.IService;
  * @since 2018-05-26
  */
 public interface LogService extends IService<Log> {
+
+    boolean insert(Log log);
 	
 }

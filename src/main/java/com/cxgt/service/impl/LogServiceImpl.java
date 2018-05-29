@@ -4,6 +4,8 @@ import com.cxgt.entity.Log;
 import com.cxgt.mapper.LogMapper;
 import com.cxgt.service.LogService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import org.apache.log4j.Logger;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,5 +18,13 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class LogServiceImpl extends ServiceImpl<LogMapper, Log> implements LogService {
-	
+
+    private static final Logger LOG = Logger.getLogger(LogServiceImpl.class);
+
+    @Async
+    @Override
+    public boolean insert(Log log) {
+        LOG.info(Thread.currentThread().toString() + " : LogServiceImpl.insert()");
+        return super.insert(log);
+    }
 }

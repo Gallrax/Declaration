@@ -30,6 +30,14 @@ public class ActivityUid implements Serializable {
      * 排序
      */
 	private Integer sort;
+	/**
+	 * passport_username
+	 */
+	private String username;
+	/**
+	 * passport_nickname
+	 */
+	private String nickname;
     /**
      * uid
      */
@@ -72,6 +80,22 @@ public class ActivityUid implements Serializable {
 		this.sort = sort;
 	}
 
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+
 	public Integer getUid() {
 		return uid;
 	}
@@ -110,6 +134,8 @@ public class ActivityUid implements Serializable {
 			"id=" + id +
 			", status=" + status +
 			", sort=" + sort +
+			", username=" + username +
+			", nickname=" + nickname +
 			", uid=" + uid +
 			", activityId=" + activityId +
 			", insertTime=" + insertTime +

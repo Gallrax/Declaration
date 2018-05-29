@@ -19,7 +19,7 @@ import org.springframework.stereotype.Controller;
  * @since 2018-05-25
  */
 @Controller
-@RequestMapping("/seriesUid")
+@RequestMapping("/seriesUser")
 public class SeriesUserController extends BaseController {
 
     private static final Logger LOG = Logger.getLogger(SeriesUserController.class);
@@ -27,6 +27,8 @@ public class SeriesUserController extends BaseController {
     private SeriesUserService seriesUidService;
     @Autowired
     private UserService userService;
+
+
 
 
 	

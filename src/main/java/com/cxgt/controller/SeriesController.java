@@ -1,6 +1,7 @@
 package com.cxgt.controller;
 
 
+import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
@@ -20,6 +21,7 @@ import com.cxgt.service.SeriesService;
 import com.sun.xml.internal.rngom.parse.host.Base;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
@@ -75,6 +77,18 @@ public class SeriesController extends BaseController {
         //TODO:uid search 需求待定(后台开发再考虑)
         Page<Series> seriesPage = seriesService.selectPage(page, wrapper);
         return ResultUtil.ok(seriesPage);
+    }
+
+    @SimpleLog
+    @RequestMapping("/{id}")
+    @ResponseBody
+    public Result serie(@PathVariable Integer id, HttpServletRequest request) {
+        Site site = getSite(request);
+        Series series = seriesService.selectById(id);
+        Assert.isNull(series);
+        Assert.isFalse(series.getSiteId().equals(site.getId()));
+        seriesService.addClick(series.getId());
+        return ResultUtil.ok(series);
     }
 
 }

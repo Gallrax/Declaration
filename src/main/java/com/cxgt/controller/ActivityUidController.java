@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.cxgt.commmon.annotaion.SimpleLog;
 import com.cxgt.commmon.constants.GlobalConstant;
 import com.cxgt.commmon.controller.BaseController;
+import com.cxgt.commmon.util.ResultUtil;
 import com.cxgt.commmon.vo.Result;
 import com.cxgt.entity.Activity;
 import com.cxgt.entity.ActivityUid;
@@ -24,7 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author Gallrax
@@ -50,8 +51,9 @@ public class ActivityUidController extends BaseController {
         Activity activity = activityService.selectById(activityId);
         Assert.isNull(activity);
         Assert.isTrue(activity.getStatus().equals(GlobalConstant.STATUS_UNABLE) || !activity.getSiteId().equals(site.getId()));
-        activityUidService.selectPage(page, new EntityWrapper<ActivityUid>().eq("activity_id", activity));
-        return null;
+        //TODO:是否根据状态查询待定
+        Page<ActivityUid> activityUidPage = activityUidService.selectPage(page, new EntityWrapper<ActivityUid>().eq("activity_id", activity));
+        return ResultUtil.ok(activityUidPage);
     }
 
 

@@ -8,6 +8,12 @@
     <!--声明注解-->
     <context:annotation-config/>
 
+    <!-- 支持异步执行 -->
+    <task:executor id="addClickExcutor" pool-size="5"/>
+    <task:annotation-driven executor="addClickExcutor"/>
+    <!-- 源码没有现成初始个数,测试为20个 -->
+    <!--<task:annotation-driven/>-->
+
     <aop:aspectj-autoproxy proxy-target-class="true"/>
     
     <context:component-scan base-package="com.cxgt" >

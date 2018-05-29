@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.cxgt.commmon.annotaion.SimpleLog;
+import com.cxgt.commmon.constants.GlobalConstant;
 import com.cxgt.commmon.controller.BaseController;
 import com.cxgt.commmon.util.ResultUtil;
 import com.cxgt.commmon.vo.Result;
@@ -63,7 +64,7 @@ public class ActivityController extends BaseController {
         if (ObjectUtil.isNotNull(status) && ObjectUtil.isNotNull(user)) {
             wrapper.eq("status", status);
         } else {
-            wrapper.ne("status", -1);
+            wrapper.ne("status", GlobalConstant.STATUS_UNABLE);
         }
 
         if (ObjectUtil.isNotNull(categoryId)) {
@@ -84,7 +85,9 @@ public class ActivityController extends BaseController {
     public Result activity(@PathVariable Integer id, HttpServletRequest request) {
         Site site = getSite(request);
         Activity activity = activityService.selectById(id);
+        Assert.isNull(activity);
         Assert.isFalse(activity.getSiteId().equals(site.getId()));
+        activityService.addClick(activity.getId());
         return ResultUtil.ok(activity);
     }
 
