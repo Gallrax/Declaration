@@ -1,9 +1,9 @@
 package com.cxgt.service.impl;
 
-import com.cxgt.entity.SeriesUid;
-import com.cxgt.mapper.SeriesUidMapper;
-import com.cxgt.service.SeriesUidService;
+import com.cxgt.entity.SeriesUser;
+import com.cxgt.mapper.SeriesUserMapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.cxgt.service.SeriesUserService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  * @since 2018-05-25
  */
 @Service
-public class SeriesUidServiceImpl extends ServiceImpl<SeriesUidMapper, SeriesUid> implements SeriesUidService {
+public class SeriesUserServiceImpl extends ServiceImpl<SeriesUserMapper, SeriesUser> implements SeriesUserService {
 	
 }

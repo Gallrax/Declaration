@@ -2,7 +2,7 @@ package com.cxgt.controller;
 
 
 import com.cxgt.commmon.controller.BaseController;
-import com.cxgt.service.SeriesUidService;
+import com.cxgt.service.SeriesUserService;
 import com.cxgt.service.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +20,11 @@ import org.springframework.stereotype.Controller;
  */
 @Controller
 @RequestMapping("/seriesUid")
-public class SeriesUidController extends BaseController {
+public class SeriesUserController extends BaseController {
 
-    private static final Logger LOG = Logger.getLogger(SeriesUidController.class);
+    private static final Logger LOG = Logger.getLogger(SeriesUserController.class);
     @Autowired
-    private SeriesUidService seriesUidService;
+    private SeriesUserService seriesUidService;
     @Autowired
     private UserService userService;
 

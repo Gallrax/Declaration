@@ -1,7 +1,7 @@
 package com.cxgt.mapper;
 
-import com.cxgt.entity.SeriesUid;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.cxgt.entity.SeriesUser;
 
 /**
  * <p>
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  * @author Gallrax
  * @since 2018-05-25
  */
-public interface SeriesUidMapper extends BaseMapper<SeriesUid> {
+public interface SeriesUserMapper extends BaseMapper<SeriesUser> {
 
 }

@@ -1,7 +1,7 @@
 package com.cxgt.service;
 
-import com.cxgt.entity.SeriesUid;
 import com.baomidou.mybatisplus.service.IService;
+import com.cxgt.entity.SeriesUser;
 
 /**
  * <p>
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.service.IService;
  * @author Gallrax
  * @since 2018-05-25
  */
-public interface SeriesUidService extends IService<SeriesUid> {
+public interface SeriesUserService extends IService<SeriesUser> {
 	
 }
