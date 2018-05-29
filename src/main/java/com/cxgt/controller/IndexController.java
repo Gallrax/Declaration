@@ -19,4 +19,14 @@ public class IndexController extends BaseController {
     public String index(HttpServletRequest request) {
         return toPage(request, "index");
     }
+
+    @RequestMapping("/activities.html")
+    public String activities(HttpServletRequest request) {
+        return toPage(request, "activities");
+    }
+
+    @RequestMapping("/series.html")
+    public String series(HttpServletRequest request) {
+        return toPage(request, "series");
+    }
 }
