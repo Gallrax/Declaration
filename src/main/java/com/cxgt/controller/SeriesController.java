@@ -6,6 +6,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.cxgt.commmon.annotaion.PassportValidate;
 import com.cxgt.commmon.annotaion.SimpleLog;
 import com.cxgt.commmon.constants.GlobalConstant;
 import com.cxgt.commmon.controller.BaseController;
@@ -89,6 +90,18 @@ public class SeriesController extends BaseController {
         Assert.isFalse(series.getSiteId().equals(site.getId()));
         seriesService.addClick(series.getId());
         return ResultUtil.ok(series);
+    }
+
+    @SimpleLog
+    @PassportValidate
+    @RequestMapping("/saveSeries")
+    @ResponseBody
+    public Result saveSeries(Series series, HttpServletRequest request) {
+        Site site = getSite(request);
+        Integer activityId = series.getActivityId();
+        activityService.selectById(activityId);
+        series.setSiteId(series.getId());
+        return null;
     }
 
 }
