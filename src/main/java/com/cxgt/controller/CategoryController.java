@@ -61,7 +61,7 @@ public class CategoryController extends BaseController {
     public Result category(@PathVariable Integer id, HttpServletRequest request) {
         Site site = getSite(request);
         Category category = categoryService.selectById(id);
-        Assert.isFalse(category.getSiteId().equals(site.getId()));
+        Assert.isTrue(category.getSiteId().equals(site.getId()));
         return ResultUtil.ok(category);
     }
 

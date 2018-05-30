@@ -1,6 +1,7 @@
 package com.cxgt.controller;
 
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
@@ -29,6 +30,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -65,14 +68,18 @@ public class SeriesController extends BaseController {
         Site site = getSite(request);
         User user = getUser(request);
         Wrapper<Series> wrapper = new EntityWrapper<Series>().eq("site_id", site.getId());
-        if (ObjectUtil.isNotNull(activityId)) wrapper.eq("activity_id", activityId);
-        if (ObjectUtil.isNotNull(categoryId) && ObjectUtil.isNull(activityId)) {
+        if (ObjectUtil.isNotNull(activityId) && checkActivity(activityId, activityService, request))
+            wrapper.eq("activity_id", activityId);
+        if (ObjectUtil.isNotNull(categoryId) && checkCategory(categoryId, categoryService, request)) {
             Set<Integer> childrenIds = categoryService.selectChildrenIdByPid(categoryId, null);
-            //防止分类id为空继续下面查询(小优化)
-            if (childrenIds == null || childrenIds.isEmpty()) {
-                List<Activity> activities = activityService.selectList(new EntityWrapper<Activity>().eq("site_id", site.getId()).in("category_id", childrenIds));
-                if (activities != null && !activities.isEmpty()) wrapper.in("activity_id", activities);
+            //category并不一定是最后一级
+            childrenIds.add(categoryId);
+            List<Activity> activities = activityService.selectList(new EntityWrapper<Activity>().eq("site_id", site.getId()).in("category_id", childrenIds));
+            Set<Integer> activitiesIds = new HashSet<>();
+            for (Activity activity : activities) {
+                activitiesIds.add(activity.getId());
             }
+            if (CollectionUtil.isNotEmpty(activities)) wrapper.in("activity_id", activitiesIds);
         }
         wrapper.eq("status", ObjectUtil.isNotNull(status) && ObjectUtil.isNotNull(user) ? status : GlobalConstant.STATUS_ABLE);
         //TODO:uid search 需求待定(后台开发再考虑)
@@ -86,8 +93,8 @@ public class SeriesController extends BaseController {
     public Result serie(@PathVariable Integer id, HttpServletRequest request) {
         Site site = getSite(request);
         Series series = seriesService.selectById(id);
-        Assert.isNull(series);
-        Assert.isFalse(series.getSiteId().equals(site.getId()));
+        Assert.notNull(series);
+        Assert.isTrue(series.getSiteId().equals(site.getId()));
         seriesService.addClick(series.getId());
         return ResultUtil.ok(series);
     }
@@ -96,12 +103,16 @@ public class SeriesController extends BaseController {
     @PassportValidate
     @RequestMapping("/saveSeries")
     @ResponseBody
-    public Result saveSeries(Series series, HttpServletRequest request) {
+    public Result saveSeries(Series series, String[] names, String[] objectids, HttpServletRequest request) {
         Site site = getSite(request);
         Integer activityId = series.getActivityId();
-        activityService.selectById(activityId);
-        series.setSiteId(series.getId());
-        return null;
+        Activity activity = activityService.selectById(activityId);
+        Assert.notNull(activity);
+        Assert.isTrue(activity.getSiteId().equals(site.getId()));
+        series.setSiteId(site.getId());
+        seriesService.insert(series);
+        //处理Resource
+        return ResultUtil.ok();
     }
 
 }

@@ -69,7 +69,8 @@ public class ActivityController extends BaseController {
 
         if (ObjectUtil.isNotNull(categoryId)) {
             Category category = categoryService.selectById(categoryId);
-            Assert.isFalse(category.getSiteId().equals(site.getId()));//不匹配抛异常
+            boolean equals = category.getSiteId().equals(site.getId());
+            Assert.isTrue(category.getSiteId().equals(site.getId()));//不匹配抛异常
             Set<Integer> childrenIds = categoryService.selectChildrenIdByPid(categoryId, null);
             childrenIds.add(categoryId);
             wrapper.in("category_id", childrenIds);
@@ -85,8 +86,8 @@ public class ActivityController extends BaseController {
     public Result activity(@PathVariable Integer id, HttpServletRequest request) {
         Site site = getSite(request);
         Activity activity = activityService.selectById(id);
-        Assert.isNull(activity);
-        Assert.isFalse(activity.getSiteId().equals(site.getId()));
+        Assert.notNull(activity);
+        Assert.isTrue(activity.getSiteId().equals(site.getId()));
         activityService.addClick(activity.getId());
         return ResultUtil.ok(activity);
     }

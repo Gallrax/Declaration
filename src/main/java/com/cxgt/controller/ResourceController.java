@@ -49,8 +49,8 @@ public class ResourceController extends BaseController {
                             HttpServletRequest request) {
         Site site = getSite(request);
         Series series = seriesService.selectById(seriesId);
-        Assert.isNull(series);
-        Assert.isFalse(series.getSiteId().equals(site.getId()));
+        Assert.notNull(series);
+        Assert.isTrue(series.getSiteId().equals(site.getId()));
         Page<Resource> resourcePage = resourceService.selectPage(page, new EntityWrapper<Resource>().eq("series_id", series));
         return ResultUtil.ok(resourcePage);
     }

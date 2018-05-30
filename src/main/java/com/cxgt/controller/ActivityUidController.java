@@ -52,7 +52,7 @@ public class ActivityUidController extends BaseController {
                         HttpServletRequest request) {
         Site site = getSite(request);
         Activity activity = activityService.selectById(activityId);
-        check(activity, site);
+        checkActivity(activityId, activityService, request);
         //TODO:是否根据状态查询待定
         Page<ActivityUid> activityUidPage = activityUidService.selectPage(page, new EntityWrapper<ActivityUid>().eq("activity_id", activity.getId()));
         return ResultUtil.ok(activityUidPage);
@@ -64,9 +64,9 @@ public class ActivityUidController extends BaseController {
     public Result join(Integer activityId, HttpServletRequest request) {
         Site site = getSite(request);
         Activity activity = activityService.selectById(activityId);
-        check(activity, site);
+        checkActivity(activityId, activityService, request);
         Cookie uid = ServletUtil.getCookie(request, "uid");
-        Assert.isNull(uid);
+        Assert.notNull(uid);
         Cookie username = ServletUtil.getCookie(request, "username");
         Cookie nickname = ServletUtil.getCookie(request, "nickname");
         ActivityUid activityUid = new ActivityUid();
@@ -79,11 +79,5 @@ public class ActivityUidController extends BaseController {
         activityUid.setInsertTimeMs(date.getTime());
         return null;
     }
-
-    private void check(Activity activity, Site site) {
-        Assert.isNull(activity);
-        Assert.isTrue(activity.getStatus().equals(GlobalConstant.STATUS_UNABLE) || !activity.getSiteId().equals(site.getId()));
-    }
-
 
 }
