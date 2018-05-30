@@ -69,7 +69,8 @@ public class SimpleLogAspect {
         setLog(JSON.toJSONString(result), new Date(end), null);//自动设置ThreadLocal中的log
         Long excute = end - begin;
         logger.info(" ---------- Controller end className : " + className + ", methodName : " + methodName + " 执行时间 : " + excute + ", result : " + result + " ; -----------");
-        logService.insert(threadLocal.get());
+        //此处不返回值AOP会报异常：Null return value from advice does not match primitive return type for: public boolean com.cxgt.service.impl.LogServiceImpl.insert(com.cxgt.entity.Log)
+        boolean insert = logService.insert(threadLocal.get());
         return result;
     }
 

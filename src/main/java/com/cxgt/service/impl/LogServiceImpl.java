@@ -21,7 +21,8 @@ public class LogServiceImpl extends ServiceImpl<LogMapper, Log> implements LogSe
 
     private static final Logger LOG = Logger.getLogger(LogServiceImpl.class);
 
-    @Async
+//    使用异步会导致SimpleLogAspect异常
+//    @Async
     @Override
     public boolean insert(Log log) {
         LOG.info(Thread.currentThread().toString() + " : LogServiceImpl.insert()");
