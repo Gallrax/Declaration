@@ -44,21 +44,39 @@
                 </script>
             </div>
         </div>
-        <div class="card_right rightF">
-            <dl class="time">
-                <dt>开始报名：</dt>
-                <dd>2018年3月29日　10:00</dd>
-                <dt>结束报名：</dt>
-                <dd>2019年5月29日　10:00</dd>
-            </dl>
-
-            <div class="bntt">
-                <a class="sign" href="#">我要报名</a>
-                <span class="sign">已报名</span>
-                <span class="dele">活动已结束</span>
-                <a class="sign" href="#">上传课程</a>
-            </div>
-        </div>
+        <script>
+            $.ajax({
+                type: "GET",
+                url: "/activity/" + golba_id,
+                //data: {},
+                async: false,
+                dataType: "json",
+                success: function(data){
+                    $('.card').empty();   //清空activity_list里面的所有内容
+                    if(data.code == 200){
+                        var result = data.data;
+                        var html = "";
+                        html += "<div class=\"card_right rightF\">";
+                        html += "<dl class=\"time\">";
+                        html += "<dt>开始报名：</dt>";
+                        html += "<dd>result.beginTime</dd>";
+                        html += "<dt>结束报名：</dt>";
+                        html += "<dd>result.endTime</dd>";
+                        html += "</dl>";
+                        html += "<div class=\"bntt\">";
+                        html += "<a class=\"sign\" href=\"#\">我要报名</a>";
+                        html += "<span class=\"sign\">已报名</span>";
+                        html += "<span class=\"dele\">活动已结束</span>";
+                        html += "<a class=\"sign\" href=\"#\">上传课程</a>";
+                        html += "</div>";
+                        html += "</div>";
+                        $(".activity_list .clearfix").html(html);
+                    }else{
+                        alert('数据加载失败...');
+                    }
+                }
+            });
+        </script>
         <div class="clear"></div>
     </div>
     <div class="act_content">

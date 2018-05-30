@@ -8,7 +8,6 @@ $('.title_row').click(function(){
 $('.declare_class li').click(function(){
     $('.declare_class li').removeClass('current');
     $(this).addClass('current');
-	
 })
 
 

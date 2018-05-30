@@ -34,17 +34,17 @@
                                 }else{
                                     html += "<div id=\"div_"+result.id+"\" class=\"declare_cell\"><a class=\"title_row\" href=\"#\">"+result.name+"</a>";
                                 }
-                                html += "<ul>"
+                                html += "<ul>";
                                 get_category(result.children);
-                                html += "</ul>"
+                                html += "</ul>";
                                 html += "</div>";
                             }
                         }
                     }
-                    //拼接HTML
+                    //拼接HTML(子层)
                     function get_html2(cate) {
                         if(cate != null && cate != ''){
-                            html += "<li><a href=\"#\">"+cate.name+"</a></li>";
+                            html += "<li><a onclick='changeDiv(\"/activities.html?categoryId="+cate.id+"\", "+cate.id+")'>"+cate.name+"</a></li>";
                         }
                     }
 
@@ -75,6 +75,7 @@
                                 $('.main_left .declare_class').empty();   //清空activity_list里面的所有内容
                                 get_html1(data.data);
                                 $(".main_left .declare_class").html(html);
+                                $.getScript("/static/template/common/js/com_index.js");
                             }else{
                                 alert('数据加载失败...');
                             }
@@ -88,7 +89,8 @@
 </div>
 <script>
     //刷新div
-    function changeDiv(url) {
+    var golba_id = "";
+    function changeDiv(url, id) {
         $("#right_content").empty();
         $.ajax({
             type: "GET",
@@ -96,18 +98,20 @@
             //data: {},
             dataType: "html",
             success: function(data){
+                golba_id = id;
                 $('#right_content').empty();   //清空right_content里面的所有内容
                 $("#right_content").html(data);
             }
         });
     }
-
-    //左侧分类
-    $(".main_left ul a").click(function(){
-        var url = $(this).attr("href");
-        changeDiv("/activities.html");
-    });
-
+</script>
+<Script language="javascript">
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
 </script>
 
 <script type="text/javascript" src="/static/template/common/js/com_index.js"></script>
