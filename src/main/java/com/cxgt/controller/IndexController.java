@@ -56,7 +56,7 @@ public class IndexController extends BaseController {
 
     @RequestMapping("/seriesInfo.html")
     public String seriesInfo(HttpServletRequest request) {
-        return toPage(request, "series");
+        return toPage(request, "seriesInfo");
     }
 
     @RequestMapping("/addSeries.html")
