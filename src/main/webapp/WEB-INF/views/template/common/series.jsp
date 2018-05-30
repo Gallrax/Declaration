@@ -36,6 +36,7 @@
     </div>
 </div>
 
+<script type="text/javascript" src="/static/template/common/js/jquery-1.7.2.min.js"></script>
 <script>
     $(function () {
         var activityId = getUrlParam("activityId");
@@ -44,23 +45,23 @@
 
     function getSeries(activityId) {
         $.ajax({
-            url: "/series/series/" + activityId,
+            url: "/series/series?activityId=" + activityId,
             type: "get",
             success: function (data) {
                 var result = $.parseJSON(data);
                 if (result.code == 200) {
-                    var obj = result.data;
+                    var obj = result.data.records;
                     var tempStr = "";
-                    for(var i in obj){
-                    tempStr += "<li>" +
-                        "<a title=\"秋季微课大赛\" href=\"#\"><img src=\"temp/01.png\"/></a>" +
-                        "<div class=\"play_number rightF\">"+ obj[i].clickCount +"次播放</div>" +
-                        "<dl>" +
-                        "<dt><a title=\"秋季微课大赛\" href=\"#\">"+ obj[i].name +"</a></dt>" +
-                        "<dd><span class=\"text\">主讲："+ obj[i].author +"</span><span class=\"text\">单位："+ obj[i].company +"</span></dd>" +
-                        "<dd>"+ obj[i].intro +"</dd>" +
-                        "</dl>" +
-                        "</li>";
+                    for (var i in obj) {
+                        tempStr += "<li>" +
+                            "<a title=\"秋季微课大赛\" href=\"#\"><img src=\"temp/01.png\"/></a>" +
+                            "<div class=\"play_number rightF\">" + obj[i].clickCount + "次播放</div>" +
+                            "<dl>" +
+                            "<dt><a title=\"秋季微课大赛\" href=\"#\">" + obj[i].name + "</a></dt>" +
+                            "<dd><span class=\"text\">主讲：" + obj[i].author + "</span><span class=\"text\">单位：" + obj[i].company + "</span></dd>" +
+                            "<dd>" + obj[i].intro + "</dd>" +
+                            "</dl>" +
+                            "</li>";
                     }
                     $("#series").html(tempStr);
                 }
