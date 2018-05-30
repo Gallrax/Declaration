@@ -40,7 +40,7 @@ public class IndexController extends BaseController {
 
     @RequestMapping("/activityInfo.html")
     public String activityInfo(HttpServletRequest request) {
-        return toPage(request, "activity");
+        return toPage(request, "activityInfo");
     }
 
     @RequestMapping("/activityUsers.html")
