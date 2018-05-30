@@ -34,29 +34,17 @@
                                 }else{
                                     html += "<div id=\"div_"+result.id+"\" class=\"declare_cell\"><a class=\"title_row\" href=\"#\">"+result.name+"</a>";
                                 }
+                                html += "<ul>"
                                 get_category(result.children);
+                                html += "</ul>"
                                 html += "</div>";
                             }
                         }
                     }
                     //拼接HTML
-                    function get_html2(cate, flag) {
-                        var index2 = 1;
+                    function get_html2(cate) {
                         if(cate != null && cate != ''){
-                            html += "<ul>"
-                            for(var i = 0; i < cate.length; i++){
-                                var result = cate[i];
-                                if(index2 == 1){
-                                    //html += "<ul>"
-                                }
-                                html += "<li><a href=\"#\">"+result.name+"</a></li>";
-                                if(index2 == flag){
-//                                    html += "</ul>"
-//                                    html += "</div>";
-                                }
-                            }
-                            html += "</ul>"
-                            html += "</div>";
+                            html += "<li><a href=\"#\">"+cate.name+"</a></li>";
                         }
                     }
 
@@ -65,7 +53,7 @@
                         if(cate_data != null && cate_data != ''){
                             for(var i = 0; i < cate_data.length; i++){
                                 var cate = cate_data[i];
-                                get_html2(cate, cate.length);
+                                get_html2(cate);
                                 if(cate.children != null){
                                     get_category(cate.children);
                                 }else{
