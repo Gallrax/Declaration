@@ -72,18 +72,19 @@
                 </li>
                 <li>
                     <div class="form_title"><span>*</span>选择作品：</div>
-                    <input id="tempResourceName" type="text" class="fidtext" readonly="readonly"/>
-                    <div class="file-style"><input type="file" onChange="uploadFile(this.files)" id="file" name="file">请选择文件
+                    <input id="resourceName" name="resourceName" type="text" class="fidtext" readonly="readonly"/>
+                    <div class="file-style"><input type="file" onChange="uploadFile()" id="file" name="file"
+                                                   accept=".png" multiple>请选择文件
                     </div>
                     <div class="prompt_div">
                         <div class="prompt_text"><b class="icons"></b>*号为必填信息</div>
                     </div>
                 </li>
-                <li>
+                <%--<li>
                     <div class="form_title">已上传作品：</div>
-                    <input id="resourceName" name="resourceName" type="text" class="fidtext"/>
+                    <input type="text" class="fidtext"/>
                     <div class="prompt_div"></div>
-                </li>
+                </li>--%>
                 <%--<li>
                     <div class="form_title">附件：</div>
                     <input name="" type="text" class="fidtext"/>
@@ -135,10 +136,10 @@
         }
         //异步提交表单
         $.ajax({
-            url:"/series/saveSeries",
+            url: "/series/saveSeries",
             data: $("#seriesForm").serialize(),
-            type:"post",
-            success:function (data) {
+            type: "post",
+            success: function (data) {
                 console.log(data);
             }
         });
@@ -146,10 +147,12 @@
 
     function uploadFile() {
         var formData = new FormData();
-        var file = $("#file").get(0).files[0];
-        console.log(file.name);
-        $("#tempResourceName").val(file.name);
-        formData.append("file", file);
+        var files = $("#file").get(0).files;
+        console.log(files);
+        for (var i in files) {
+            $("#tempResourceName").val(files[i].name);
+            formData.append("files", files[i]);
+        }
         $.ajax({
             url: "/upload",
             type: "post",
@@ -161,10 +164,11 @@
                 console.log(result);
                 if (result.code == 200) {
                     var obj = $.parseJSON(result.data);
-                    $("#objectid").val(obj.objectid);
-                    // var http = "http://p.ananas.chaoxing.com/star3/origin/" + obj.objectid;
-                    $("#resourceName").val(file.name);
-                    // console.log(http);
+                    var tempStr = "";
+                    for(var i in obj){
+                        tempStr += obj[i].name +",";
+                    }
+                    $("#resourceName").val(tempStr);
                 }
             }
         })

@@ -22,4 +22,12 @@ public class UploadTest {
         String result = HttpUtil.post("http://cs.ananas.chaoxing.com/upload", fileHashMap);
         System.out.println("rresult : " + result);
     }
+
+    @Test
+    public void test02() {
+        long l = System.currentTimeMillis();
+        String s = l + "Aa";
+        String substring = s.substring(13);
+        System.out.println(substring);
+    }
 }
