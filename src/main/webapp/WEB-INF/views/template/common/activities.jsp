@@ -13,7 +13,7 @@
             <script>
                 $.ajax({
                     type: "GET",
-                    url: "/activity/activities?categoryId=" + golba_id,
+                    url: "/activity/activities?categoryId=" + cate_id,
                     //data: {},
                     async: false,
                     dataType: "json",
@@ -35,7 +35,7 @@
                                 html += "<dd>"+result.insertTime+"</dd>";
                                 html += "<dd>"+result.place+"</dd>";
                                 html += "<dd>"+result.hoster+"</dd>";
-                                html += "<dd style=\"margin-top:6px;\"><a class=\"chakan\" onclick='changeDiv(\"/activityInfo.html\", "+result.id+");'>查看活动</a></dd>";
+                                html += "<dd style=\"margin-top:6px;\"><a class=\"chakan\" onclick='changeDiv(\"/activityInfo.html\", "+result.id+", 2);'>查看活动</a></dd>";
                                 html += "</dl>";
                                 html += "</li>";
                             }

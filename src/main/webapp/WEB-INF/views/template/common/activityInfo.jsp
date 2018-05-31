@@ -9,88 +9,79 @@
 <div class="main_right rightF">
     <div class="return_content"><a class="bnt_return" href="#"><b class="icons"></b>返回</a></div>
     <div class="card clearfix">
-        <div class="card_left leftF">
-            <img src="temp/01.png" width="292" height="194"/>
-            <h3><a title="市容.文萃杯网络摄影大赛" href="#">市容.文萃杯网络摄影大赛</a></h3>
-            <div class="text">
-                <p>地点：上海市</p>
-                <p>发起：上海市市容环境卫生水上管理处</p>
-                <p>参与人数：100/200</p>
-            </div>
-            <div class="parent"><span class="huifu con_color"><b class="icons"></b>1890</span><span
-                    class="zan zan_cur con_color"><b class="icons"></b>1890</span></div>
-            <div class="fenxiang">
-                <div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a><a href="#"
-                                                                                                  class="bds_sqq"
-                                                                                                  data-cmd="sqq"
-                                                                                                  title="分享到QQ好友"></a><a
-                        href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a><a href="#" class="bds_qzone"
-                                                                                           data-cmd="qzone"
-                                                                                           title="分享到QQ空间"></a><a
-                        href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a></div>
-                <script>
-                    window._bd_share_config = {
-                        "common": {
-                            "bdSnsKey": {},
-                            "bdText": "",
-                            "bdMini": "2",
-                            "bdMiniList": false,
-                            "bdPic": "",
-                            "bdStyle": "0",
-                            "bdSize": "24"
-                        }, "share": {}
-                    };
-                    with (document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion=' + ~(-new Date() / 36e5)];
-                </script>
-            </div>
-        </div>
-        <script>
-            $.ajax({
-                type: "GET",
-                url: "/activity/" + golba_id,
-                //data: {},
-                async: false,
-                dataType: "json",
-                success: function(data){
-                    $('.card').empty();   //清空activity_list里面的所有内容
-                    if(data.code == 200){
-                        var result = data.data;
-                        var html = "";
-                        html += "<div class=\"card_right rightF\">";
-                        html += "<dl class=\"time\">";
-                        html += "<dt>开始报名：</dt>";
-                        html += "<dd>result.beginTime</dd>";
-                        html += "<dt>结束报名：</dt>";
-                        html += "<dd>result.endTime</dd>";
-                        html += "</dl>";
-                        html += "<div class=\"bntt\">";
-                        html += "<a class=\"sign\" href=\"#\">我要报名</a>";
-                        html += "<span class=\"sign\">已报名</span>";
-                        html += "<span class=\"dele\">活动已结束</span>";
-                        html += "<a class=\"sign\" href=\"#\">上传课程</a>";
-                        html += "</div>";
-                        html += "</div>";
-                        $(".activity_list .clearfix").html(html);
-                    }else{
-                        alert('数据加载失败...');
-                    }
-                }
-            });
-        </script>
+
         <div class="clear"></div>
     </div>
     <div class="act_content">
         <div class="act_title"><h2><b class="icons"></b>活动内容</h2></div>
         <div class="act_text">
-            <p>西青区有着厚重的历史文化底蕴和独特的地域文化魅力，民俗资源优势、文化资源优势，革命历</p>
-            <p>史资源优势和地缘优势非常突出，进而形成了个性特色独有的“运河文化、民俗文化、年画文化、大院文化、赶大营文化、精武文化、红色文化和生态文化”八大特色文化品牌。</p>
-            <p>&nbsp;</p>
-            <p>
-                西青区有着厚重的历史文化底蕴和独特的地域文化魅力，民俗资源优势、文化资源优势，革命历史资源优势和地缘优势非常突出，进而形成了个性特色独有的“运河文化、民俗文化、年画文化、大院文化、赶大营文化、精武文化、红色文化和生态文化”八大特色文化品牌。西青区有着厚重的历史文化底蕴和独特的地域文化魅力，民俗资源优势、文化资源优势，革命历史资源优势和地缘优势非常突出，进而形成了个性特色独有的“运河文化、民俗文化、年画文化、大院文化、赶大营文化、精武文化、红色文化和生态文化”八大特色文化品牌</p>
-            <p>&nbsp;</p>
-            <p>
-                西青区有着厚重的历史文化底蕴和独特的地域文化魅力，民俗资源优势、文化资源优势，革命历史资源优势和地缘优势非常突出，进而形成了个性特色独有的“运河文化、民俗文化、年画文化、大院文化、赶大营文化、精武文化、红色文化和生态文化”八大特色文化品牌。</p>
-            <div class="more_bottom"><a class="more_an icons" href="javascript:"></a></div>
+
         </div>
     </div>
 </div>
+
+<script>
+    function getCardLeftHtml(result) {
+        var temp_html = "";
+        temp_html += "<div class=\"card_left leftF\">";
+        temp_html += "<img src=\"temp/01.png\" width=\"292\" height=\"194\"/>";
+        temp_html += "<h3><a title=\""+result.name+"\" href=\"#\">"+result.name+"</a></h3>";
+        temp_html += "<div class=\"text\">";
+        temp_html += "<p>地点："+result.place+"</p>";
+        temp_html += "<p>发起："+result.hoster+"</p>";
+        temp_html += "<p>参与人数："+result.peopleCount+"</p>";
+        temp_html += "</div>";
+        temp_html += "<div class=\"parent\"><span class=\"huifu con_color\"><b class=\"icons\"></b>"+result.clickCount+"</span>";
+        temp_html += "<span class=\"zan zan_cur con_color\"><b class=\"icons\"></b>"+result.clickCount+"</span></div>";
+        ///*temp_html += " file=\"/static/template/common/fenxiang.html\"%>";*/
+        temp_html += "</div>";
+        return temp_html;
+    }
+
+    function getCardRightHtml(result) {
+        var temp_html = "";
+        temp_html += "<div class=\"card_right rightF\">";
+        temp_html += "<dl class=\"time\">";
+        temp_html += "<dt>开始报名：</dt>";
+        temp_html += "<dd>"+result.beginTime+"</dd>";
+        temp_html += "<dt>结束报名：</dt>";
+        temp_html += "<dd>"+result.endTime+"</dd>";
+        temp_html += "</dl>";
+        temp_html += "<div class=\"bntt\">";
+        temp_html += "<a class=\"sign\" href='javascript:alert(\"报名成功!\")'>我要报名</a>";
+        temp_html += "<span class=\"sign\">已报名</span>";
+        temp_html += "<span class=\"dele\">活动已结束</span>";
+        temp_html += "<a class=\"sign\" onclick='changeDiv(\"/addSeries.html\")'>上传课程</a>";
+        temp_html += "</div>";
+        temp_html += "</div>";
+        return temp_html;
+    }
+
+    function getContentHtml(content) {
+        var temp_html = "";
+        temp_html += content;
+        temp_html += "<div class=\"more_bottom\"><a class=\"more_an icons\" href=\"javascript:\"></a></div>";
+        return temp_html;
+    }
+
+    $(function () {
+        $.ajax({
+            type: "GET",
+            url: "/activity/" + activity_id,
+            //data: {},
+            async: false,
+            dataType: "json",
+            success: function(data){
+                $('.card').empty();   //清空activity_list里面的所有内容
+                if(data.code == 200){
+                    var result = data.data;
+                    var card_html = getCardLeftHtml(result) + getCardRightHtml(result);
+                    $(".card").html(card_html);
+                    $(".act_text").html(getContentHtml(result.content));//添加content
+                }else{
+                    alert('数据加载失败...');
+                }
+            }
+        });
+    });
+</script>
