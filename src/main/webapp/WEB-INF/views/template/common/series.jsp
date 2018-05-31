@@ -19,7 +19,7 @@
     <div class="video_pic_list">
         <ul id="series">
             <li>
-                <a title="秋季微课大赛" href="#"><img src="temp/01.png"/></a>
+                <a title="秋季微课大赛" href="#"><img src="/static/template/common/temp/01.png"/></a>
                 <div class="play_number rightF">129次播放</div>
                 <dl>
                     <dt><a title="秋季微课大赛" href="#">秋季微课大赛</a></dt>
@@ -54,7 +54,7 @@
                     var tempStr = "";
                     for (var i in obj) {
                         tempStr += "<li>" +
-                            "<a title=\"秋季微课大赛\" href=\"#\"><img src=\"temp/01.png\"/></a>" +
+                            "<a title=\"秋季微课大赛\" href=\"#\"><img src=\"/static/template/common/temp/01.png\"/></a>" +
                             "<div class=\"play_number rightF\">" + obj[i].clickCount + "次播放</div>" +
                             "<dl>" +
                             "<dt><a title=\"秋季微课大赛\" href=\"#\">" + obj[i].name + "</a></dt>" +

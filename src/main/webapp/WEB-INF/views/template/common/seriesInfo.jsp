@@ -11,7 +11,7 @@
     <div class="title_deta"><h3 id="seriesName">秋季微课大赛</h3><span><b style="font-size:16px;">&middot;</b> 本系列被观看1239次、被2人平分、平均分4.5</span>
     </div>
     <div class="video_card clearfix">
-        <a title="秋季微课大赛" href="#"><img id="seriesLogo" src="temp/01.png"/></a>
+        <a title="秋季微课大赛" href="#"><img id="seriesLogo" src="/static/template/common/temp/01.png"/></a>
         <div class="play_number rightF">一等奖</div>
         <dl>
             <dd><span class="text">主讲：<span id="seriesAuthor">周树人</span></span><span class="text">单位：<span id="seriesCompany">中国人民大学</span></span></dd>
