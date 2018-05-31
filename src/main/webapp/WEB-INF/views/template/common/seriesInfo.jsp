@@ -22,7 +22,7 @@
     <div class="act_content">
         <div class="act_title"><h2><b class="icons"></b>视频列表</h2></div>
         <div class="video_set_list">
-            <ul>
+            <ul id="resources">
                 <%--<li><a href="#">1、第一集 解密《周树人》的秘密</a></li>
                 <li><a href="#">2、第二集 解密《周树人》的秘密</a></li>
                 <li><a href="#">3、第三集 解密《周树人》的秘密</a></li>
@@ -43,6 +43,7 @@
 <script>
     $(function () {
         getSeries(globalSeriesId);
+        getResources(globalSeriesId);
     });
 
     function getSeries(seriesId) {
@@ -60,6 +61,24 @@
                     $("#seriesAuthorIntro").html(obj.authorIntro);
                     // $("#seriesLogo").attr("src", obj.logo);
                     $("#seriesLogo").attr("src", "/static/template/common/temp/01.png");
+                }
+            }
+        })
+    }
+
+    function getResources(seriesId) {
+        $.ajax({
+            url:"/resource/resources?seriesId="+seriesId,
+            type:"get",
+            success:function (data) {
+                var result = $.parseJSON(data);
+                if (result.code == 200) {
+                    var objs = result.data.records;
+                    var tempStr = "";
+                    for(var i = 0; i< objs.length; i++){
+                        tempStr += "<li><a href=\""+ objs[i].fileRoute +"\">"+ objs[i].name +"</a></li>";
+                    }
+                    $("#resources").append(tempStr);
                 }
             }
         })

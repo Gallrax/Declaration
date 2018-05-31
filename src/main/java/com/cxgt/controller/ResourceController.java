@@ -51,7 +51,7 @@ public class ResourceController extends BaseController {
         Series series = seriesService.selectById(seriesId);
         Assert.notNull(series);
         Assert.isTrue(series.getSiteId().equals(site.getId()));
-        Page<Resource> resourcePage = resourceService.selectPage(page, new EntityWrapper<Resource>().eq("series_id", series));
+        Page<Resource> resourcePage = resourceService.selectPage(page, new EntityWrapper<Resource>().eq("series_id", series.getId()));
         return ResultUtil.ok(resourcePage);
     }
 

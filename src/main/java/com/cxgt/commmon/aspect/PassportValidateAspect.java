@@ -49,7 +49,7 @@ public class PassportValidateAspect {
     public Object aroud(ProceedingJoinPoint joinPoint) throws Throwable {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         Cookie cookie = ServletUtil.getCookie(request, "uid");
-        if (ObjectUtil.isNull(cookie)) throw new PassportValidateException();
+//        if (ObjectUtil.isNull(cookie)) throw new PassportValidateException();
         return joinPoint.proceed();
     }
 

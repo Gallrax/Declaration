@@ -13,12 +13,10 @@ import com.cxgt.commmon.constants.GlobalConstant;
 import com.cxgt.commmon.controller.BaseController;
 import com.cxgt.commmon.util.ResultUtil;
 import com.cxgt.commmon.vo.Result;
-import com.cxgt.entity.Activity;
-import com.cxgt.entity.Series;
-import com.cxgt.entity.Site;
-import com.cxgt.entity.User;
+import com.cxgt.entity.*;
 import com.cxgt.service.ActivityService;
 import com.cxgt.service.CategoryService;
+import com.cxgt.service.ResourceService;
 import com.cxgt.service.SeriesService;
 import com.sun.xml.internal.rngom.parse.host.Base;
 import org.apache.log4j.Logger;
@@ -30,10 +28,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * <p>
@@ -54,6 +49,8 @@ public class SeriesController extends BaseController {
     private CategoryService categoryService;
     @Autowired
     private ActivityService activityService;
+    @Autowired
+    private ResourceService resourceService;
 
     @SimpleLog
     @RequestMapping("/series")
@@ -103,15 +100,27 @@ public class SeriesController extends BaseController {
     @PassportValidate
     @RequestMapping("/saveSeries")
     @ResponseBody
-    public Result saveSeries(Series series, String[] names, String[] objectids, HttpServletRequest request) {
+    public Result saveSeries(Series series, String resourceName, String objectid, HttpServletRequest request) {
         Site site = getSite(request);
         Integer activityId = series.getActivityId();
         Activity activity = activityService.selectById(activityId);
         Assert.notNull(activity);
         Assert.isTrue(activity.getSiteId().equals(site.getId()));
         series.setSiteId(site.getId());
+        Date date = new Date();
+        series.setInsertTime(date);
+        series.setInsertTimeMs(date.getTime());
         seriesService.insert(series);
         //处理Resource
+        Resource resource = new Resource();
+        resource.setSiteId(site.getId());
+        resource.setName(resourceName);
+        resource.setObjectid(objectid);
+        resource.setFileRoute("http://p.ananas.chaoxing.com/star3/origin/" + objectid);
+        resource.setSeriesId(series.getId());
+        resource.setInsertTime(date);
+        resource.setInsertTimeMs(date.getTime());
+        resourceService.insert(resource);
         return ResultUtil.ok();
     }
 

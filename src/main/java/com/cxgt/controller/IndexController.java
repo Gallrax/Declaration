@@ -4,6 +4,7 @@ import cn.hutool.http.HttpUtil;
 import com.cxgt.commmon.annotaion.PassportValidate;
 import com.cxgt.commmon.annotaion.SimpleLog;
 import com.cxgt.commmon.controller.BaseController;
+import com.cxgt.commmon.util.ResultUtil;
 import com.cxgt.commmon.vo.Result;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -78,7 +79,7 @@ public class IndexController extends BaseController {
         String result = HttpUtil.post("http://cs.ananas.chaoxing.com/upload", fileHashMap);
         tempFile.delete();
         LOG.info(" result : " + result);
-        return null;
+        return ResultUtil.ok(result);
     }
 
 }
