@@ -11,8 +11,8 @@
     <title>Title</title>
 </head>
 <body>
-<link type="text/css" rel="stylesheet" href="/static/template/common/css/global.css" />
-<link type="text/css" rel="stylesheet" href="/static/template/common/css/style.css" />
+<link type="text/css" rel="stylesheet" href="/static/template/common/css/global.css"/>
+<link type="text/css" rel="stylesheet" href="/static/template/common/css/style.css"/>
 <script type="text/javascript" src="/static/template/common/js/jquery-1.7.2.min.js"></script>
 
 <div class="main_box wrap1080 clearfix">
@@ -30,108 +30,119 @@
 </body>
 </html>
 
-<script>
+<script language="javascript">
+
+    var type;
+    var globalCategoryId;
+    var globalActivityId;
+    var globalSeriesId;
+    var globalPageIndex;
+
     //加载分类数据
     $(function () {
+        type = getUrlParam("type");
+        writeCategory();
+    });
+
+    function writeCategory() {
         $.ajax({
             type: "GET",
             url: "/category/tree",
             //data: {},
             dataType: "json",
-            success: function(data){
-                if(data.code == '200'){
+            success: function (data) {
+                if (data.code == '200') {
                     $('.main_left .declare_class').empty();   //清空activity_list里面的所有内容
-                    getOuter(data.data);
-                    $(".main_left .declare_class").html(tempHtml);
+                    $(".main_left .declare_class").html(getOuter(data.data));
                     $.getScript("/static/template/common/js/com_index.js");
-                }else{
+                } else {
                     alert('数据加载失败...');
                 }
             }
         });
-    });
-</script>
-<script language="javascript">
-    function getQueryString(name) {
-        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-        var r = window.location.search.substr(1).match(reg);
-        if (r != null) return unescape(r[2]);
-        return null;
     }
 
-    //赋予全局id
-    var cate_id = "", activity_id = "";
-    var cate_type = 1, activity_type = 2, activity_uid_type = 3//分类1，活动列表2
-    function getId(id, type) {
-        var url = "";
-        if(type == cate_type){
-            cate_id = id;
-            return;
+    //拼接HTML(最外层)
+    function getOuter(cate) {
+        var tempStr = "";
+        if (cate != null && cate != '') {
+            for (var i = 0; i < cate.length; i++) {
+                var result = cate[i];
+                var tempIndex = 0;
+                if (tempIndex == 0) {
+                    tempIndex++;
+                    tempStr += "<div id=\"div_" + result.id + "\" class=\"declare_cell declare_cell_active\"><a class=\"title_row\" href=\"#\">" + result.name + "</a>";
+                } else {
+                    tempStr += "<div id=\"div_" + result.id + "\" class=\"declare_cell\"><a class=\"title_row\" href=\"#\">" + result.name + "</a>";
+                }
+                tempStr += getCategory(result.children);
+                tempStr += "</div>";
+            }
         }
-        if(type == activity_type){
-            activity_id = id;
-            return;
+        return tempStr;
+    }
+
+    //递归获取分类(不包括最外层)
+    function getCategory(cate_data) {
+        var tempStr = "<ul>";
+        if (cate_data != null && cate_data != '') {
+            for (var i = 0; i < cate_data.length; i++) {
+                var cate = cate_data[i];
+                tempStr += getInner(cate);
+                if (cate.children != null) {
+                    tempStr += getCategory(cate.children);
+                }
+            }
         }
+        tempStr += "</ul>";
+        return tempStr;
+    }
+
+    //获取最内层
+    function getInner(cate) {
+        var tempStr = "";
+        if (isNotEmpty(cate)) {
+            if (type == 1) {
+                tempStr += "<li><a onclick=\"changeDiv('/activities.html?categoryId=" + cate.id + "', " + cate.id + ",null" + ",null" + ",null" + ")\">" + cate.name + "</a></li>";
+            } else if (type == 2) {
+                tempStr += "<li><a onclick=\"changeDiv('/series.html?categoryId=" + cate.id + "', " + cate.id + ",null" + ",null" + ",null" + ")\">" + cate.name + "</a></li>";
+            }
+        }
+        return tempStr;
     }
 
     //公共方法刷新div
-    function changeDiv(url, id, type) {
+    function changeDiv(url, categoryId, activityId, seriesId, pageIndex) {
+        flushGlobalValue(categoryId, activityId, seriesId, pageIndex);
         $("#right_content").empty();
-        getId(id, type);
         $.ajax({
             type: "GET",
             url: url,
-            //data: {},
             dataType: "html",
-            success: function(data){
-                //getId(id, type);
+            success: function (data) {
                 $('#right_content').empty();   //清空right_content里面的所有内容
                 $("#right_content").html(data);
             }
         });
     }
 
-    //拼接HTML(最外层)
-    var tempHtml = "";
-    var index = 0;
-    function getOuter(cate) {
-        if(cate != null && cate != ''){
-            for(var i = 0; i < cate.length; i++){
-                var result = cate[i];
-                if(index == 0){
-                    index ++;
-                    tempHtml += "<div id=\"div_"+result.id+"\" class=\"declare_cell declare_cell_active\"><a class=\"title_row\" href=\"#\">"+result.name+"</a>";
-                }else{
-                    tempHtml += "<div id=\"div_"+result.id+"\" class=\"declare_cell\"><a class=\"title_row\" href=\"#\">"+result.name+"</a>";
-                }
-                tempHtml += "<ul>";
-                getCategory(result.children);
-                tempHtml += "</ul>";
-                tempHtml += "</div>";
-            }
-        }
-    }
-    //拼接HTML(子层)
-    function getInner(cate) {
-        if(cate != null && cate != ''){
-            tempHtml += "<li><a onclick='changeDiv(\"/activities.html?categoryId="+cate.id+"\", "+cate.id+", 1)'>"+cate.name+"</a></li>";
-        }
+    function flushGlobalValue(categoryId, activityId, seriesId, pageIndex) {
+        if (isNotEmpty(categoryId)) globalCategoryId = categoryId;
+        if (isNotEmpty(activityId)) globalActivityId = activityId;
+        if (isNotEmpty(seriesId)) globalSeriesId = seriesId;
+        if (isNotEmpty(pageIndex)) globalPageIndex = pageIndex;
     }
 
-    //递归获取分类(不包括最外层)
-    function getCategory(cate_data) {
-        if(cate_data != null && cate_data != ''){
-            for(var i = 0; i < cate_data.length; i++){
-                var cate = cate_data[i];
-                getInner(cate);
-                if(cate.children != null){
-                    getCategory(cate.children);
-                }else{
-                    continue;
-                }
-            }
-        }else{
-            return null;
-        }
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);
+        return null;
     }
+
+    function isNotEmpty(o) {
+        if (o == null || o == '') return false;
+        return true;
+    }
+
 </script>

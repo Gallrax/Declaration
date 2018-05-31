@@ -25,14 +25,14 @@
         var temp_html = "";
         temp_html += "<div class=\"card_left leftF\">";
         temp_html += "<img src=\"temp/01.png\" width=\"292\" height=\"194\"/>";
-        temp_html += "<h3><a title=\""+result.name+"\" href=\"#\">"+result.name+"</a></h3>";
+        temp_html += "<h3><a title=\"" + result.name + "\" href=\"#\">" + result.name + "</a></h3>";
         temp_html += "<div class=\"text\">";
-        temp_html += "<p>地点："+result.place+"</p>";
-        temp_html += "<p>发起："+result.hoster+"</p>";
-        temp_html += "<p>参与人数："+result.peopleCount+"</p>";
+        temp_html += "<p>地点：" + result.place + "</p>";
+        temp_html += "<p>发起：" + result.hoster + "</p>";
+        temp_html += "<p>参与人数：" + result.peopleCount + "</p>";
         temp_html += "</div>";
-        temp_html += "<div class=\"parent\"><span class=\"huifu con_color\"><b class=\"icons\"></b>"+result.clickCount+"</span>";
-        temp_html += "<span class=\"zan zan_cur con_color\"><b class=\"icons\"></b>"+result.clickCount+"</span></div>";
+        temp_html += "<div class=\"parent\"><span class=\"huifu con_color\"><b class=\"icons\"></b>" + result.clickCount + "</span>";
+        temp_html += "<span class=\"zan zan_cur con_color\"><b class=\"icons\"></b>" + result.clickCount + "</span></div>";
         ///*temp_html += " file=\"/static/template/common/fenxiang.html\"%>";*/
         temp_html += "</div>";
         return temp_html;
@@ -43,9 +43,9 @@
         temp_html += "<div class=\"card_right rightF\">";
         temp_html += "<dl class=\"time\">";
         temp_html += "<dt>开始报名：</dt>";
-        temp_html += "<dd>"+result.beginTime+"</dd>";
+        temp_html += "<dd>" + result.beginTime + "</dd>";
         temp_html += "<dt>结束报名：</dt>";
-        temp_html += "<dd>"+result.endTime+"</dd>";
+        temp_html += "<dd>" + result.endTime + "</dd>";
         temp_html += "</dl>";
         temp_html += "<div class=\"bntt\">";
         temp_html += "<a class=\"sign\" href='javascript:alert(\"报名成功!\")'>我要报名</a>";
@@ -67,18 +67,18 @@
     $(function () {
         $.ajax({
             type: "GET",
-            url: "/activity/" + activity_id,
+            url: "/activity/" + globalActivityId,
             //data: {},
             async: false,
             dataType: "json",
-            success: function(data){
+            success: function (data) {
                 $('.card').empty();   //清空activity_list里面的所有内容
-                if(data.code == 200){
+                if (data.code == 200) {
                     var result = data.data;
                     var card_html = getCardLeftHtml(result) + getCardRightHtml(result);
                     $(".card").html(card_html);
                     $(".act_text").html(getContentHtml(result.content));//添加content
-                }else{
+                } else {
                     alert('数据加载失败...');
                 }
             }

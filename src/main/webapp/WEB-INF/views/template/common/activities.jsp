@@ -13,16 +13,16 @@
             <script>
                 $.ajax({
                     type: "GET",
-                    url: "/activity/activities?categoryId=" + cate_id,
+                    url: "/activity/activities?categoryId=" + globalCategoryId,
                     //data: {},
                     async: false,
                     dataType: "json",
-                    success: function(data){
+                    success: function (data) {
                         $('.activity_list .clearfix').empty();   //清空activity_list里面的所有内容
-                        if(data.code == 200){
+                        if (data.code == 200) {
                             var records = data.data.records;
                             var html = "";
-                            for(var i = 0; i < records.length; i++){
+                            for (var i = 0; i < records.length; i++) {
                                 var result = records[i];
                                 html += "<li>";
                                 html += "<div class=\"divImg\">";
@@ -31,16 +31,16 @@
                                 html += "<div class=\"parent pos_abs\"><span class=\"huifu con_color\"><b class=\"icons\"></b>1890</span><span class=\"zan zan_cur con_color\"><b class=\"icons\"></b>1890</span></div>\n";
                                 html += "</div>";
                                 html += "<dl>";
-                                html += "<dt><a href=\"#\">"+result.name+"</a></dt>";
-                                html += "<dd>"+result.insertTime+"</dd>";
-                                html += "<dd>"+result.place+"</dd>";
-                                html += "<dd>"+result.hoster+"</dd>";
-                                html += "<dd style=\"margin-top:6px;\"><a class=\"chakan\" onclick='changeDiv(\"/activityInfo.html\", "+result.id+", 2);'>查看活动</a></dd>";
+                                html += "<dt><a href=\"#\">" + result.name + "</a></dt>";
+                                html += "<dd>" + result.insertTime + "</dd>";
+                                html += "<dd>" + result.place + "</dd>";
+                                html += "<dd>" + result.hoster + "</dd>";
+                                html += "<dd style=\"margin-top:6px;\"><a class=\"chakan\" onclick=\"changeDiv('/activityInfo.html', null, " + result.id + ", null, null)\">查看活动</a></dd>";
                                 html += "</dl>";
                                 html += "</li>";
                             }
                             $(".activity_list .clearfix").html(html);
-                        }else{
+                        } else {
                             alert('数据加载失败...');
                         }
                     }
@@ -48,7 +48,9 @@
             </script>
         </ul>
         <div class="pagination">
-            <a class="first" href="">首页</a><a class="pre" href="">上一页</a><a href="">1</a><a href="">2</a><a class="cur" href="">3</a><a href="">4</a><a href="">5</a><a href="#" class="next">下一页</a><a href="">尾页</a>
+            <a class="first" href="">首页</a><a class="pre" href="">上一页</a><a href="">1</a><a href="">2</a><a class="cur"
+                                                                                                            href="">3</a><a
+                href="">4</a><a href="">5</a><a href="#" class="next">下一页</a><a href="">尾页</a>
         </div>
     </div>
 </div>
