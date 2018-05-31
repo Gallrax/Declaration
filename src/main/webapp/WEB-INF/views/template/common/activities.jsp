@@ -67,6 +67,7 @@
     }
 
     function writePageHtml(currentPage, pages) {
+        globalPageIndex = currentPage;
         var upPage = currentPage - 1;
         var downPage = currentPage + 1;
         tempPageHtml += gethtml(1, '首页');
