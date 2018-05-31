@@ -28,10 +28,10 @@
                 </dl>
             </li>
         </ul>
-        <div id="page" class="pagination">
-            <a class="first" href="">首页</a><a class="pre" href="">上一页</a><a href="">1</a><a href="">2</a><a class="cur"
+        <div id="tempPage" class="pagination">
+            <%--<a class="first" href="">首页</a><a class="pre" href="">上一页</a><a href="">1</a><a href="">2</a><a class="cur"
                                                                                                             href="">3</a><a
-                href="">4</a><a href="">5</a><a href="#" class="next">下一页</a><a href="">尾页</a>
+                href="">4</a><a href="">5</a><a href="#" class="next">下一页</a><a href="">尾页</a>--%>
         </div>
     </div>
 </div>
@@ -39,25 +39,25 @@
 <script type="text/javascript" src="/static/template/common/js/jquery-1.7.2.min.js"></script>
 <script>
     $(function () {
-        var activityId = getUrlParam("activityId");
-        getSeries(activityId);
+        getSeries(globalCategoryId);
     });
 
-    function getSeries(activityId) {
+    function getSeries(categoryId) {
         $.ajax({
-            url: "/series/series?activityId=" + activityId,
+            url: "/series/series?categoryId=" + categoryId,
             type: "get",
             success: function (data) {
                 var result = $.parseJSON(data);
                 if (result.code == 200) {
+                    writePage(result.data);
                     var obj = result.data.records;
                     var tempStr = "";
                     for (var i in obj) {
                         tempStr += "<li>" +
-                            "<a title=\"秋季微课大赛\" href=\"#\"><img src=\"/static/template/common/temp/01.png\"/></a>" +
+                            "<a title=\"秋季微课大赛\" href=\"#\" onclick=\"changeDiv('/seriesInfo.html', null, null, " + obj[i].id + ", null)\"><img src=\"/static/template/common/temp/01.png\"/></a>" +
                             "<div class=\"play_number rightF\">" + obj[i].clickCount + "次播放</div>" +
                             "<dl>" +
-                            "<dt><a title=\"秋季微课大赛\" href=\"#\">" + obj[i].name + "</a></dt>" +
+                            "<dt><a title=\"秋季微课大赛\" href=\"#\" onclick=\"changeDiv('/seriesInfo.html', null, null, " + obj[i].id + ", null)\">" + obj[i].name + "</a></dt>" +
                             "<dd><span class=\"text\">主讲：" + obj[i].author + "</span><span class=\"text\">单位：" + obj[i].company + "</span></dd>" +
                             "<dd>" + obj[i].intro + "</dd>" +
                             "</dl>" +
@@ -69,11 +69,29 @@
         })
     }
 
-    //获取url中的参数
-    function getUrlParam(name) {
-        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
-        var r = window.location.search.substr(1).match(reg);  //匹配目标参数
-        if (r != null) return unescape(r[2]);
-        return null; //返回参数值
+    function writePage(page) {
+        var current = page.current;
+        var pages = page.pages;
+        var tempStr = "";
+        tempStr += getPageHtml(1, "首页");
+        var tempPre = current > 1 && pages > 1 ? current - 1 : 1;
+        tempStr += getPageHtml(tempPre, "上一页");
+        for (var i = 1; i <= pages; i++) {
+            if (i == current) {
+                tempStr += "<a class=\"cur\" href=\"#\" onclick=\"changeDiv('/series.html', null, null, null, " + i + "\">"+ i +"</a>";
+            } else {
+                tempStr += getPageHtml(i, i);
+            }
+        }
+        var tempNext = current > 1 && pages > 1 ? current + 1 : 1;
+        tempStr += getPageHtml(tempNext, "下一页");
+        tempStr += getPageHtml(pages, "尾页");
+        $("#tempPage").html(tempStr);
+    }
+
+    function getPageHtml(pageIndex, name) {
+        //除了当前页具有样式，其他都无样式
+        var tempStr = "<a href=\"\" onclick=\"changeDiv('/series.html', null, null, null, " + pageIndex + "\">" + name + "</a>";
+        return tempStr;
     }
 </script>

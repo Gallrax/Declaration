@@ -42,8 +42,7 @@
 <script type="text/javascript" src="/static/template/common/js/jquery-1.7.2.min.js"></script>
 <script>
     $(function () {
-        var seriesId = getUrlParam("seriesId");
-        getSeries(seriesId);
+        getSeries(globalSeriesId);
     });
 
     function getSeries(seriesId) {

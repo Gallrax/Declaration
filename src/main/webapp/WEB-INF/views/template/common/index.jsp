@@ -131,6 +131,7 @@
         if (isNotEmpty(activityId)) globalActivityId = activityId;
         if (isNotEmpty(seriesId)) globalSeriesId = seriesId;
         if (isNotEmpty(pageIndex)) globalPageIndex = pageIndex;
+        console.log(" globalCategoryId : " + globalCategoryId + " globalActivityId : " + globalActivityId + " globalSeriesId : " + globalSeriesId + " globalPageIndex : " + globalPageIndex);
     }
 
     function getUrlParam(name) {
