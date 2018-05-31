@@ -103,9 +103,9 @@
         var tempStr = "";
         if (isNotEmpty(cate)) {
             if (type == 1) {
-                tempStr += "<li><a onclick=\"changeDiv('/activities.html?categoryId=" + cate.id + "', " + cate.id + ",null" + ",null" + ",null" + ")\">" + cate.name + "</a></li>";
+                tempStr += "<li><a id=\"category_" + cate.id + "\" onclick=\"changeDiv('/activities.html?categoryId=" + cate.id + "', " + cate.id + ",null" + ",null" + ",null" + ")\">" + cate.name + "</a></li>";
             } else if (type == 2) {
-                tempStr += "<li><a onclick=\"changeDiv('/series.html?categoryId=" + cate.id + "', " + cate.id + ",null" + ",null" + ",null" + ")\">" + cate.name + "</a></li>";
+                tempStr += "<li><a id=\"category_" + cate.id + "\" onclick=\"changeDiv('/series.html?categoryId=" + cate.id + "', " + cate.id + ",null" + ",null" + ",null" + ")\">" + cate.name + "</a></li>";
             }
         }
         return tempStr;

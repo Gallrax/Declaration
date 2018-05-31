@@ -9,7 +9,7 @@
 <div class="main_right rightF">
     <div class="search_bd">
         <div class="search_content">
-            <h3>秋季微课大赛</h3>
+            <h3 id="tempTitle"></h3>
             <%--<div class="search_div">
                 <input name="" type="text" class="fidtext" placeholder="请输入学号或姓名"/><input name="" type="button"
                                                                                           class="bnt_sear"/>
@@ -39,6 +39,7 @@
 <script type="text/javascript" src="/static/template/common/js/jquery-1.7.2.min.js"></script>
 <script>
     $(function () {
+        $("#tempTitle").html($("#category_" + globalCategoryId).html());
         getSeries(globalCategoryId);
     });
 
@@ -70,6 +71,7 @@
     }
 
     function writePage(page) {
+        globalPageIndex = page.current;
         var current = page.current;
         var pages = page.pages;
         var tempStr = "";

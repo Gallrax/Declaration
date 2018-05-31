@@ -7,7 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <div class="main_right rightF">
-    <div class="return_content"><a class="bnt_return" href="#"><b class="icons"></b>返回</a></div>
+    <div class="return_content"><a class="bnt_return" href="#" onclick="changeDiv('/series.html', null, null, null, null)"><b class="icons"></b>返回</a></div>
     <div class="title_deta"><h3 id="seriesName">秋季微课大赛</h3><span><b style="font-size:16px;">&middot;</b> 本系列被观看1239次、被2人平分、平均分4.5</span>
     </div>
     <div class="video_card clearfix">
@@ -58,7 +58,8 @@
                     $("#seriesCompany").html(obj.company);
                     $("#seriesIntro").html(obj.intro);
                     $("#seriesAuthorIntro").html(obj.authorIntro);
-                    $("#seriesLogo").attr("src", obj.logo);
+                    // $("#seriesLogo").attr("src", obj.logo);
+                    $("#seriesLogo").attr("src", "/static/template/common/temp/01.png");
                 }
             }
         })
