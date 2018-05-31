@@ -78,7 +78,7 @@
         tempStr += getPageHtml(tempPre, "上一页");
         for (var i = 1; i <= pages; i++) {
             if (i == current) {
-                tempStr += "<a class=\"cur\" href=\"#\" onclick=\"changeDiv('/series.html', null, null, null, " + i + "\">"+ i +"</a>";
+                tempStr += "<a class=\"cur\" href=\"#\" onclick=\"changeDiv('/series.html', null, null, null, " + i + ")\">"+ i +"</a>";
             } else {
                 tempStr += getPageHtml(i, i);
             }
@@ -91,7 +91,7 @@
 
     function getPageHtml(pageIndex, name) {
         //除了当前页具有样式，其他都无样式
-        var tempStr = "<a href=\"\" onclick=\"changeDiv('/series.html', null, null, null, " + pageIndex + "\">" + name + "</a>";
+        var tempStr = "<a href=\"#\" onclick=\"changeDiv('/series.html', null, null, null, " + pageIndex + ")\">" + name + "</a>";
         return tempStr;
     }
 </script>
