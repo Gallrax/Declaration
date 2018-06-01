@@ -100,7 +100,7 @@
                 <li>
                     <div class="form_title"></div>
                     <input id="activityId" type="hidden" name="activityId"/>
-                    <input type="hidden" name="objectid" id="objectid">
+                    <input type="hidden" name="resourceIds" id="resourceids">
                     <input type="button" value="提交" class="bnt_input" onclick="subSeriesForm()"/>
                     <a class="bnt_return" href="#">返回</a>
                 </li>
@@ -140,7 +140,13 @@
             data: $("#seriesForm").serialize(),
             type: "post",
             success: function (data) {
-                console.log(data);
+                var result = $.parseJSON(data);
+                if (result.code == 200) {
+                    alert("发布成功，请等待审核");
+                    changeDiv('/activityInfo.html');
+                } else {
+                    alert("上传异常，请重新上传");
+                }
             }
         });
     }
@@ -149,6 +155,7 @@
         var formData = new FormData();
         var files = $("#file").get(0).files;
         console.log(files);
+        if(files.length == 0) return false;
         for (var i in files) {
             $("#tempResourceName").val(files[i].name);
             formData.append("files", files[i]);
@@ -163,12 +170,17 @@
                 var result = $.parseJSON(data);
                 console.log(result);
                 if (result.code == 200) {
-                    var obj = $.parseJSON(result.data);
+                    console.log(result.data);
                     var tempStr = "";
-                    for(var i in obj){
-                        tempStr += obj[i].name +",";
+                    var tempResourceIds = "";
+                    for(var i in result.data){
+                        tempStr += result.data[i].name +",";
+                        tempResourceIds += result.data[i].id +",";
                     }
+                    console.log(tempStr);
+                    console.log(tempResourceIds);
                     $("#resourceName").val(tempStr);
+                    $("#resourceids").val(tempResourceIds);
                 }
             }
         })

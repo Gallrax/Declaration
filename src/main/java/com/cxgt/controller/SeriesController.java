@@ -4,6 +4,7 @@ package com.cxgt.controller;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -100,7 +101,7 @@ public class SeriesController extends BaseController {
     @PassportValidate
     @RequestMapping("/saveSeries")
     @ResponseBody
-    public Result saveSeries(Series series, String resourceName, String objectid, HttpServletRequest request) {
+    public Result saveSeries(Series series, String resourceIds, HttpServletRequest request) {
         Site site = getSite(request);
         Integer activityId = series.getActivityId();
         Activity activity = activityService.selectById(activityId);
@@ -112,15 +113,18 @@ public class SeriesController extends BaseController {
         series.setInsertTimeMs(date.getTime());
         seriesService.insert(series);
         //处理Resource
-        Resource resource = new Resource();
-        resource.setSiteId(site.getId());
-        resource.setName(resourceName);
-        resource.setObjectid(objectid);
-        resource.setFileRoute("http://p.ananas.chaoxing.com/star3/origin/" + objectid);
-        resource.setSeriesId(series.getId());
-        resource.setInsertTime(date);
-        resource.setInsertTimeMs(date.getTime());
-        resourceService.insert(resource);
+        String[] ids = resourceIds.split(",");
+        List<Resource> resources = new ArrayList<>();
+        for (String id : ids) {
+            if (StrUtil.isNotEmpty(id)) {
+                Resource resource = resourceService.selectById(id);
+                Assert.notNull(resource);
+                Assert.isTrue(resource.getSiteId().equals(site.getId()));
+                resource.setSeriesId(series.getId());
+                resources.add(resource);
+            }
+        }
+        resourceService.updateBatchById(resources);
         return ResultUtil.ok();
     }
 

@@ -40,12 +40,12 @@
 <script>
     $(function () {
         $("#tempTitle").html($("#category_" + globalCategoryId).html());
-        getSeries(globalCategoryId);
+        getSeries(globalCategoryId, globalPageIndex == null ? 1 : globalPageIndex);
     });
 
-    function getSeries(categoryId) {
+    function getSeries(categoryId, current) {
         $.ajax({
-            url: "/series/series?categoryId=" + categoryId,
+            url: "/series/series?size=4&current=" + current + "&categoryId=" + categoryId,
             type: "get",
             success: function (data) {
                 var result = $.parseJSON(data);
@@ -80,7 +80,7 @@
         tempStr += getPageHtml(tempPre, "上一页");
         for (var i = 1; i <= pages; i++) {
             if (i == current) {
-                tempStr += "<a class=\"cur\" href=\"#\" onclick=\"changeDiv('/series.html', null, null, null, " + i + ")\">"+ i +"</a>";
+                tempStr += "<a class=\"cur\" href=\"#\" onclick=\"changeDiv('/series.html', null, null, null, " + i + ")\">" + i + "</a>";
             } else {
                 tempStr += getPageHtml(i, i);
             }
