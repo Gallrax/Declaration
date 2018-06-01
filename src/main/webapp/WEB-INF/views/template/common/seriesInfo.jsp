@@ -76,7 +76,7 @@
                     var objs = result.data.records;
                     var tempStr = "";
                     for(var i = 0; i< objs.length; i++){
-                        tempStr += "<li><a href=\""+ objs[i].fileRoute +"\">"+ objs[i].name +"</a></li>";
+                        tempStr += "<li><a target='_blank' href=\"/resourceInfo.html?resourceId="+ objs[i].id +"\">"+ objs[i].name +"</a></li>";
                     }
                     $("#resources").append(tempStr);
                 }

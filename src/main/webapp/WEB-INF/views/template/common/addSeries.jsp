@@ -74,7 +74,7 @@
                     <div class="form_title"><span>*</span>选择作品：</div>
                     <input id="resourceName" name="resourceName" type="text" class="fidtext" readonly="readonly"/>
                     <div class="file-style"><input type="file" onChange="uploadFile()" id="file" name="file"
-                                                   accept=".png" multiple>请选择文件
+                                                   accept="video/*" multiple>请选择文件
                     </div>
                     <div class="prompt_div">
                         <div class="prompt_text"><b class="icons"></b>*号为必填信息</div>

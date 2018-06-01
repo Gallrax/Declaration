@@ -77,7 +77,12 @@ public class SeriesController extends BaseController {
             for (Activity activity : activities) {
                 activitiesIds.add(activity.getId());
             }
-            if (CollectionUtil.isNotEmpty(activities)) wrapper.in("activity_id", activitiesIds);
+            if (CollectionUtil.isNotEmpty(activities)) {
+                wrapper.in("activity_id", activitiesIds);
+            } else {
+                //当没有活动时，则表示没有系列，直接返回
+                return ResultUtil.ok(page);
+            }
         }
         wrapper.eq("status", ObjectUtil.isNotNull(status) && ObjectUtil.isNotNull(user) ? status : GlobalConstant.STATUS_ABLE);
         //TODO:uid search 需求待定(后台开发再考虑)
