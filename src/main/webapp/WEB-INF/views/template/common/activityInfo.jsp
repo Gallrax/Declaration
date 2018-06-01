@@ -7,7 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <div class="main_right rightF">
-    <div class="return_content"><a class="bnt_return" href="#"><b class="icons"></b>返回</a></div>
+    <div class="return_content"><a class="bnt_return" onclick="changeDiv('/activities.html');"><b class="icons"></b>返回</a></div>
     <div class="card clearfix">
 
         <div class="clear"></div>
@@ -18,13 +18,16 @@
 
         </div>
     </div>
+    <div class="members">
+
+    </div>
 </div>
 
 <script>
     function getCardLeftHtml(result) {
         var temp_html = "";
         temp_html += "<div class=\"card_left leftF\">";
-        temp_html += "<img src=\"temp/01.png\" width=\"292\" height=\"194\"/>";
+        temp_html += "<img src=\""+result.logo+"\" onerror=\"src='/static/template/common/temp/01.png'\" width=\"292\" height=\"194\"/>";
         temp_html += "<h3><a title=\"" + result.name + "\" href=\"#\">" + result.name + "</a></h3>";
         temp_html += "<div class=\"text\">";
         temp_html += "<p>地点：" + result.place + "</p>";
@@ -48,10 +51,10 @@
         temp_html += "<dd>" + result.endTime + "</dd>";
         temp_html += "</dl>";
         temp_html += "<div class=\"bntt\">";
-        temp_html += "<a class=\"sign\" href='javascript:alert(\"报名成功!\")'>我要报名</a>";
+        temp_html += "<a class=\"sign\" onclick='joinActivity();'>我要报名</a>";
         temp_html += "<span class=\"sign\">已报名</span>";
         temp_html += "<span class=\"dele\">活动已结束</span>";
-        temp_html += "<a class=\"sign\" onclick='changeDiv(\"/addSeries.html\")'>上传课程</a>";
+        temp_html += "<a class=\"sign\" onclick='if (true){changeDiv(\"/addSeries.html\")}else {alert(\"请先登录\");}'>上传课程</a>";
         temp_html += "</div>";
         temp_html += "</div>";
         return temp_html;
@@ -60,11 +63,52 @@
     function getContentHtml(content) {
         var temp_html = "";
         temp_html += content;
-        temp_html += "<div class=\"more_bottom\"><a class=\"more_an icons\" href=\"javascript:\"></a></div>";
+        //temp_html += "<div class=\"more_bottom\"><a class=\"more_an icons\" href=\"javascript:\"></a></div>";
         return temp_html;
     }
 
+    function getMember() {
+        $.ajax({
+            type: "GET",
+            url: "/activityUid/users?activityId=" + globalActivityId,
+            //data: {},
+            async: false,
+            dataType: "json",
+            success: function (data) {
+                if (data.code == 200) {
+                    var records = data.data.records;
+                    for(var i = 0; i < records.length; i ++){
+                        var result = records[i];
+                        writeMemberHtml(result);
+                    }
+                } else {
+                    alert('数据加载失败...');
+                }
+            }
+        });
+    }
+    function writeMemberHtml(result) {
+        var memberHtml = "<div class=\"act_title\"><h2><b class=\"icons\"></b>活动成员</h2><a class=\"more\" href=\"/activityUsers.html?activityId="+globalActivityId+"\">全部成员&gt;</a></div>";
+        memberHtml += "<ul class=\"clearfix\"><li>" +
+            "                <a href=\"javascript:;\"><img src=\"temp/photos.jpg\" onerror=\"src='/static/template/common/temp/photos.jpg'\" /></a>" +
+            "                <p><a href=\"javascript:;\">"+result.nickname+"</a></p>" +
+            "            </li></ul>";
+        $(".members").html(memberHtml);
+    }
+
+    function joinActivity() {
+        if(true){
+            $.get("/activityUid/join?activityId" + globalActivityId, function(data){
+                alert("报名成功!");
+            });
+        }else{
+            alert("请先登录");
+            //window.location.href = "";//请先登录
+        }
+    }
+
     $(function () {
+        getMember();//活动成员
         $.ajax({
             type: "GET",
             url: "/activity/" + globalActivityId,
