@@ -26,4 +26,14 @@ public class IndexController extends BaseController {
         return "template/admin/index";
     }
 
+    @RequestMapping("/activity/activities.html")
+    public String activities() {
+        return "template/admin/activity/activities";
+    }
+
+    @RequestMapping("/series/series.html")
+    public String series() {
+        return "template/admin/series/series";
+    }
+
 }

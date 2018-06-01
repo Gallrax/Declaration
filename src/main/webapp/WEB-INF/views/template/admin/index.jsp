@@ -36,15 +36,15 @@
         <div class="navBar layui-side-scroll">
             <ul class="layui-nav layui-nav-tree" lay-filter="tempNav">
                 <li class="layui-nav-item layui-nav-itemed">
-                    <a href="javascript:;">后台首页1</a>
+                    <a href="javascript:;">后台首页</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:;" data-url="page/main.html">A</a></dd>
-                        <dd><a href="javascript:;" data-url="page/main.html">B</a></dd>
-                        <dd><a href="javascript:;" data-url="page/main.html">C</a></dd>
+                        <dd><a href="javascript:;" data-url="/admin/index.html">资源管理</a></dd>
+                        <dd><a href="javascript:;" data-url="/admin/login.html">系列管理</a></dd>
+                        <dd><a href="javascript:;" data-url="/admin/activity/activities.html">活动管理</a></dd>
                     </dl>
                 </li>
-                <li class="layui-nav-item layui-nav-itemed">
-                    <a href="javascript:;" data-url="page/main.html">后台首页2</a>
+                <%--<li class="layui-nav-item layui-nav-itemed">
+                    <a href="javascript:;" data-url="/admin/index.html">后台首页2</a>
                     <dl class="layui-nav-child">
                         <dd><a>A</a></dd>
                         <dd><a>B</a></dd>
@@ -58,7 +58,7 @@
                         <dd><a>B</a></dd>
                         <dd><a>C</a></dd>
                     </dl>
-                </li>
+                </li>--%>
             </ul>
         </div>
     </div>
@@ -66,14 +66,13 @@
     <!-- 右侧tab选项卡和内容 -->
     <div class="layui-body" style="bottom: 0;border-left: solid 2px #1AA094;" id="admin-body">
         <div class="layui-tab admin-nav-card layui-tab-brief" lay-filter="admin-tab" lay-allowclose="true">
-            <ul class="layui-tab-title">  <!-- tab选项卡标题 -->
+            <%--因初学阶段，没有学习多iframe，暂只使用一个iframe --%>
+            <%--<ul class="layui-tab-title">  <!-- tab选项卡标题 -->
                 <li class="layui-this" lay-id="1">Aa</li>
-                <li lay-id="2">Bb</li>
-                <li lay-id="3">Cc</li>
-            </ul>
+            </ul>--%>
             <div class="layui-tab-content" style="min-height: 150px; padding: 5px 0 0 0;">  <!-- tab选项卡内容 -->
                 <div class="layui-tab-item layui-show">
-                    <iframe src="/admin/login.html" width="100%" height="100%"></iframe>
+                    <iframe id="tempIframe" src="/admin/login.html" width="100%" height="100%"></iframe>
                 </div>
             </div>
         </div>
@@ -98,20 +97,39 @@
             var url = (elem).attr("data-url");
             console.log(url);
             if (url != null) {
-                console.log("-");
-                element.tabAdd('demo', {
-                    title: 'new tab',
-                    content: 'new tab content',
-                }).call(elem);
-                element.tabChange('demo', 1);
+                $("#tempIframe").attr("src", url);
             }
         });
 
-        /*$(".layui-nav-child a").click(function (e) {
-            console.log(e);
-            var url = $(this).attr("data-url");
-            console.log(url);
-        });*/
+        $('.site-demo-active').on('click', function(){
+            var othis = $(this), type = othis.data('type');
+            active[type] ? active[type].call(this, othis) : '';
+        });
+
+        //触发事件
+        var active = {
+            tabAdd: function(){
+                //新增一个Tab项
+                element.tabAdd('demo', {
+                    title: '新选项'+ (Math.random()*1000|0) //用于演示
+                    ,content: '内容'+ (Math.random()*1000|0)
+                    ,id: new Date().getTime() //实际使用一般是规定好的id，这里以时间戳模拟下
+                })
+                console.log("-");
+            }
+            ,tabDelete: function(othis){
+                //删除指定Tab项
+                element.tabDelete('demo', '1'); //删除：“商品管理”
+
+
+                othis.addClass('layui-btn-disabled');
+            }
+            ,tabChange: function(){
+                //切换到指定Tab项
+                element.tabChange('demo', '2'); //切换到：用户管理
+            }
+        };
+
     });
 
 </script>
