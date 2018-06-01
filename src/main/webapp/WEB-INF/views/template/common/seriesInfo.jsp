@@ -7,16 +7,19 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <div class="main_right rightF">
-    <div class="return_content"><a class="bnt_return" href="#" onclick="changeDiv('/series.html', null, null, null, null)"><b class="icons"></b>返回</a></div>
+    <div class="return_content"><a class="bnt_return" href="#"
+                                   onclick="changeDiv('/series.html', null, null, null, null)"><b
+            class="icons"></b>返回</a></div>
     <div class="title_deta"><h3 id="seriesName">秋季微课大赛</h3><span><b style="font-size:16px;">&middot;</b> 本系列被观看1239次、被2人平分、平均分4.5</span>
     </div>
     <div class="video_card clearfix">
         <a title="秋季微课大赛" href="#"><img id="seriesLogo" src="/static/template/common/temp/01.png"/></a>
         <div class="play_number rightF">一等奖</div>
         <dl>
-            <dd><span class="text">主讲：<span id="seriesAuthor">周树人</span></span><span class="text">单位：<span id="seriesCompany">中国人民大学</span></span></dd>
+            <dd><span class="text">主讲：<span id="seriesAuthor">周树人</span></span><span class="text">单位：<span
+                    id="seriesCompany">中国人民大学</span></span></dd>
             <dd id="seriesIntro">本系列主要讲述了茶的种类、如何正确的品茶、茶对人体的好处、还介绍了体验绿茶、布置茶席、正山小种的茶香、茶味、茶理和茶的自然。</dd>
-            <dd><a class="bnt_play" href="#">立即播放</a></dd>
+            <dd><a id="play" class="bnt_play" target="_blank" href="#">立即播放</a></dd>
         </dl>
     </div>
     <div class="act_content">
@@ -35,7 +38,8 @@
     <div class="members">
         <div class="act_title"><h2><b class="icons"></b>主讲名师</h2></div>
         <div class="master_teacher">
-            <p id="seriesAuthorIntro">文学院教授，文学博士。中国民主同盟河南大学委员会副主委，中国近代文学学会小说分会副会长，国家级精品课《中国近代文学史》主讲人，国家级教学团队中国现当代文学教学团队骨干成员。</p>
+            <p id="seriesAuthorIntro">
+                文学院教授，文学博士。中国民主同盟河南大学委员会副主委，中国近代文学学会小说分会副会长，国家级精品课《中国近代文学史》主讲人，国家级教学团队中国现当代文学教学团队骨干成员。</p>
         </div>
     </div>
 </div>
@@ -44,13 +48,14 @@
     $(function () {
         getSeries(globalSeriesId);
         getResources(globalSeriesId);
+        $("#play").attr("href", "/resourceInfo.html?seriesId=" + globalSeriesId);
     });
 
     function getSeries(seriesId) {
         $.ajax({
-            url:"/series/"+ seriesId,
-            type:"get",
-            success:function (data) {
+            url: "/series/" + seriesId,
+            type: "get",
+            success: function (data) {
                 var result = $.parseJSON(data);
                 if (result.code == 200) {
                     var obj = result.data;
@@ -68,15 +73,15 @@
 
     function getResources(seriesId) {
         $.ajax({
-            url:"/resource/resources?seriesId="+seriesId,
-            type:"get",
-            success:function (data) {
+            url: "/resource/resources?seriesId=" + seriesId,
+            type: "get",
+            success: function (data) {
                 var result = $.parseJSON(data);
                 if (result.code == 200) {
                     var objs = result.data.records;
                     var tempStr = "";
-                    for(var i = 0; i< objs.length; i++){
-                        tempStr += "<li><a target='_blank' href=\"/resourceInfo.html?resourceId="+ objs[i].id +"\">"+ objs[i].name +"</a></li>";
+                    for (var i = 0; i < objs.length; i++) {
+                        tempStr += "<li><a target='_blank' href=\"/resourceInfo.html?resourceId=" + objs[i].id + "&seriesId=" + globalSeriesId + "\">" + objs[i].name + "</a></li>";
                     }
                     $("#resources").append(tempStr);
                 }
@@ -88,6 +93,7 @@
     function getUrlParam(name) {
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
         var r = window.location.search.substr(1).match(reg);  //匹配目标参数
-        if (r != null) return unescape(r[2]); return null; //返回参数值
+        if (r != null) return unescape(r[2]);
+        return null; //返回参数值
     }
 </script>
