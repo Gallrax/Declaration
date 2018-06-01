@@ -72,6 +72,11 @@ public class IndexController extends BaseController {
         return toPage(request, "addSeries");
     }
 
+    @RequestMapping("/resourceInfo.html")
+    public String resourceInfo(HttpServletRequest request) {
+        return toPage(request, "resourceInfo");
+    }
+
     @SimpleLog
     @PassportValidate
     @RequestMapping("/upload")
