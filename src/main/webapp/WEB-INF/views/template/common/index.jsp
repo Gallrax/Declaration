@@ -102,10 +102,11 @@
     function getInner(cate) {
         var tempStr = "";
         if (isNotEmpty(cate)) {
+            //最后一个参数，要将全局分页置为1
             if (type == 1) {
-                tempStr += "<li><a id=\"category_" + cate.id + "\" onclick=\"changeDiv('/activities.html?categoryId=" + cate.id + "', " + cate.id + ",null" + ",null" + ",null" + ")\">" + cate.name + "</a></li>";
+                tempStr += "<li><a id=\"category_" + cate.id + "\" onclick=\"changeDiv('/activities.html?categoryId=" + cate.id + "', " + cate.id + ",null" + ",null" + ",1" + ")\">" + cate.name + "</a></li>";
             } else if (type == 2) {
-                tempStr += "<li><a id=\"category_" + cate.id + "\" onclick=\"changeDiv('/series.html?categoryId=" + cate.id + "', " + cate.id + ",null" + ",null" + ",null" + ")\">" + cate.name + "</a></li>";
+                tempStr += "<li><a id=\"category_" + cate.id + "\" onclick=\"changeDiv('/series.html?categoryId=" + cate.id + "', " + cate.id + ",null" + ",null" + ",1" + ")\">" + cate.name + "</a></li>";
             }
         }
         return tempStr;
