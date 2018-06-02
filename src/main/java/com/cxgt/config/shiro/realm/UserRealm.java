@@ -91,6 +91,7 @@ public class UserRealm extends AuthorizingRealm {
         UsernamePasswordToken usernamePasswordToken = (UsernamePasswordToken) token;
         User user = userService.selectOne(new EntityWrapper<User>().eq("username", usernamePasswordToken.getUsername()).eq("site_id", site.getId()));
         Assert.notNull(user);
+        session.setAttribute(GlobalConstant.SESSION_USER, user);
         return new SimpleAuthenticationInfo(user, user.getPassword(), user.getUsername());
     }
 }

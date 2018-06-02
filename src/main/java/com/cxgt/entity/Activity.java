@@ -1,8 +1,11 @@
 package com.cxgt.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import java.util.Date;
 import com.baomidou.mybatisplus.enums.IdType;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.io.Serializable;
 
 /**
@@ -61,10 +64,14 @@ public class Activity implements Serializable {
     /**
      * 开始时间
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JSONField(format = "yyyy-MM-dd")
 	private Date beginTime;
     /**
      * 结束时间
      */
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JSONField(format = "yyyy-MM-dd")
 	private Date endTime;
     /**
      * 点击量

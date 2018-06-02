@@ -31,9 +31,19 @@ public class IndexController extends BaseController {
         return "template/admin/activity/activities";
     }
 
+    @RequestMapping("/activity/addActivity.html")
+    public String addActivity() {
+        return "template/admin/activity/addActivity";
+    }
+
     @RequestMapping("/series/series.html")
     public String series() {
         return "template/admin/series/series";
+    }
+
+    @RequestMapping("/series/seriesInfo.html")
+    public String addSeries() {
+        return "template/admin/series/seriesInfo";
     }
 
 }

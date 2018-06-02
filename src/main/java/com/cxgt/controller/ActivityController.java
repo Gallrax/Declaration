@@ -103,7 +103,7 @@ public class ActivityController extends BaseController {
     public Result saveActivity(Activity activity, HttpServletRequest request) {
         Site site = getSite(request);
         User user = getUser(request);
-        Assert.notNull(activity.getCategoryId());
+//        Assert.notNull(activity.getCategoryId());
         activity.setUserId(user.getId());
         activity.setSiteId(site.getId());
         Date date = new Date();

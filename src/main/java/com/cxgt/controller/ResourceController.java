@@ -1,7 +1,12 @@
 package com.cxgt.controller;
 
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.http.HttpUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.cxgt.commmon.annotaion.SimpleLog;
@@ -22,6 +27,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -52,6 +59,18 @@ public class ResourceController extends BaseController {
         Assert.notNull(series);
         Assert.isTrue(series.getSiteId().equals(site.getId()));
         Page<Resource> resourcePage = resourceService.selectPage(page, new EntityWrapper<Resource>().eq("series_id", series.getId()));
+        List<Resource> resourceList = new ArrayList<>();
+        for (Resource resource : resourcePage.getRecords()) {
+            if (StrUtil.isNotEmpty(resource.getFileRoute())) continue;
+            String objectid = resource.getObjectid();
+            String result = HttpUtil.get("http://cs.ananas.chaoxing.com/status/" + objectid);
+            JSONObject jsonObject = JSONObject.parseObject(result);
+            if (jsonObject.get("status").equals("success")) {
+                resource.setFileRoute(jsonObject.get("http").toString());
+                resourceList.add(resource);
+            }
+        }
+        if (CollectionUtil.isNotEmpty(resourceList)) resourceService.updateBatchById(resourceList);
         return ResultUtil.ok(resourcePage);
     }
 

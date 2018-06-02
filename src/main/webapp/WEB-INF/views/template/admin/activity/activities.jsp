@@ -13,96 +13,96 @@
 </head>
 <body class="layui-layout-body">
 <div>
-    <table id="activities" class="layui-table" lay-filter="activities">
-        <thead>
-        <tr>
-            <th lay-data="{field:'id'}">id</th>
-            <th lay-data="{field:'name'}">name</th>
-            <th lay-data="{field:'right', toolbar: '#barDemo'}">操作</th>
-        </tr>
-        </thead>
-        <tbody id="tempTbody">
-        </tbody>
-    </table>
-    <div id="page">
-
+    <div>
+        <button class="layui-btn layuiadmin-btn-tags" data-type="add">添加</button>
     </div>
+    <table id="series" class="layui-table" lay-filter="series">
+    </table>
 </div>
 </body>
 </html>
 <script src="/static/tools/layui/layui.js"></script>
-<script src="/static/template/common/js/jquery-1.7.2.min.js"></script>
 <script>
 
-    var tempJudge = 0;
+    layui.use('table', function () {
+        var table = layui.table;
 
-    $(function () {
-        //手动填充数据方式
-        getActivity(1, 3);
+        table.render({
+            elem: "#series",
+            url: "/activity/activities",
+            page: true,
+            cols: [[ //表头
+                {field: 'id', title: 'ID', fixed: 'left'},
+                {field: 'name', title: '名称'},
+                {field: 'content', title: '内容'},
+                {field: 'place', title: '地点'},
+                {field: 'hoster', title: '发起者'},
+                {field: 'beginTime', title: '开始时间'},
+                {field: 'endTime', title: '结束时间'}
+                // {field: 'tool', title: '操作', toolbar: '#barDemo'}
+            ]],
+            request: {
+                pageName: 'current',
+                limintName: 'size'
+            },
+            response: {
+                statusName: 'code',
+                statusCode: 200
+            },
+            renderResponse: function (data) {
+                var tempData = {};
+                tempData[this.response.dataName] = data.data.records;
+                tempData[this.response.countName] = data.data.total;
+                tempData[this.response.statusName] = data.code;
+                return tempData;
+            }
+        });
+
+        table.on('tool(series)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var tr = obj.tr; //获得当前行 tr 的DOM对象
+
+            if (layEvent === 'detail') { //查看
+                console.log(data);
+                //do somehing
+            } else if (layEvent === 'del') { //删除
+                layer.confirm('真的删除行么', function (index) {
+                    obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                    layer.close(index);
+                    //向服务端发送删除指令
+                });
+            } else if (layEvent === 'edit') { //编辑
+                //do something
+                console.log(data);
+                //同步更新缓存对应的值
+                obj.update({
+                    username: '123'
+                    , title: 'xxx'
+                });
+            }
+        });
     });
 
-    function getActivity(pageIndex, pageSize) {
-        $.ajax({
-            url: "/series/series?current=" + pageIndex + "&size=" + pageSize + "&activityId=1",
-            type: "get",
-            success: function (data) {
-                var result = $.parseJSON(data);
-                if (result.code == 200) {
-                    var activities = result.data.records;
-                    var tempStr = "";
-                    for (var i in activities) {
-                        tempStr += "<tr><td>" + activities[i].id + "</td><td>" + activities[i].name + "</td></tr>";
-                    }
-                    $("#tempTbody").html(tempStr);
-                    initTablePage(result);
-                    initTableTool();
-                }
-            }
-        })
-    }
+    layui.use('layer', function () {
+        var $ = layui.$;
 
-    function initTablePage(result) {
-        if (tempJudge == 0) {
-            tempJudge++;
-            layui.use('laypage', function () {
-                var laypage = layui.laypage;
-                laypage.render({
-                    elem: 'page',
-                    limit: result.data.size,
-                    curr: result.data.current,
-                    count: result.data.total,
-                    jump: function (obj, first) {
-                        getActivity(obj.curr, obj.limit);
-                    }
-                })
-            });
-        }
-    }
-
-    function initTableTool() {
-        layui.use('table', function () {
-            var table = layui.table;
-            table.init('activities');
-            //监听工具条
-            table.on('tool(activities)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
-                var data = obj.data; //获得当前行数据
-                var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
-                var tr = obj.tr; //获得当前行 tr 的DOM对象
-                if (layEvent === 'detail') { //查看
-                    //do somehing
-                } else if (layEvent === 'del') { //删除
-                    layer.confirm('真的删除行么', function (index) {
-                        obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-                        layer.close(index);
-                        //向服务端发送删除指令
-                    });
-                } else if (layEvent === 'edit') { //编辑
-                    //do something
-                }
-            });
+        $('.layui-btn.layuiadmin-btn-tags').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
         });
-    }
 
+        var active = {
+            add: function () {
+                layer.open({
+                    type: 2,
+                    area: ['50%', '80%'],
+                    title: '添加',
+                    content: '/admin/activity/addActivity.html'
+                });
+            }
+        }
+    });
 </script>
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>

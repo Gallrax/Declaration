@@ -115,6 +115,7 @@ public class SeriesController extends BaseController {
         Assert.notNull(activity);
         Assert.isTrue(activity.getSiteId().equals(site.getId()));
         series.setSiteId(site.getId());
+        if (activity.getIsVerify().equals(1)) series.setStatus(1);
         Date date = new Date();
         series.setInsertTime(date);
         series.setInsertTimeMs(date.getTime());
