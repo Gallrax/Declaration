@@ -19,6 +19,7 @@
 </body>
 </html>
 <script src="/static/tools/layui/layui.js"></script>
+<script src="/static/tools/layui/lay/modules/laytpl.js"></script>
 <script>
     layui.use('table', function () {
         var table = layui.table;
@@ -30,6 +31,10 @@
             cols: [[ //表头
                 {field: 'id', title: 'ID', fixed: 'left'},
                 {field: 'name', title: '名称'},
+                {field: 'phone', title: '联系方式'},
+                {field: 'company', title: '单位'},
+                {field: 'author', title: '作者'},
+                {field: 'insertTime', title: '创建时间'},
                 {field: 'tool', title: '操作', toolbar:'#barDemo'}
             ]],
             request: {
@@ -55,7 +60,7 @@
             var tr = obj.tr; //获得当前行 tr 的DOM对象
 
             if(layEvent === 'detail'){ //查看
-                console.log(data);
+                console.log(data.status);
                 //do somehing
             } else if(layEvent === 'del'){ //删除
                 layer.confirm('真的删除行么', function(index){
@@ -71,17 +76,46 @@
                     username: '123'
                     ,title: 'xxx'
                 });
+            }else if(layEvent === 'check'){ //审核通过
+                //do something
+                console.log(data);
+                check(data.id);
+                //同步更新缓存对应的值
+                obj.update({
+                    username: '123'
+                    ,title: 'xxx'
+                });
             }
         });
     });
 </script>
 <script type="text/html" id="barDemo">
+    <!-- 这里同样支持 laytpl 语法，如： -->
+
     <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 
-    <!-- 这里同样支持 laytpl 语法，如： -->
-    {{#  if(d.auth > 2){ }}
+    {{#  if(d.status == 0){ }}
     <a class="layui-btn layui-btn-xs" lay-event="check">审核</a>
     {{#  } }}
+
+</script>
+<script>
+    //主动加载jquery模块
+    function check(seriesId) {
+        layui.use(['jquery', 'layer'], function(){
+            var $ = layui.$ //重点处
+                ,layer = layui.layer;
+
+            //后面就跟你平时使用jQuery一样
+            $.getJSON("/series/updateStatus?seriesId=" + seriesId, function (data) {
+                if(data.code == 200){
+                    layer.msg("审核成功");
+                }else{
+                    layer.msg("审核失败");
+                }
+            });
+        });
+    }
 </script>
