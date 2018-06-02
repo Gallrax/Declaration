@@ -19,6 +19,9 @@ import com.cxgt.service.ActivityService;
 import com.cxgt.service.CategoryService;
 import com.sun.org.apache.regexp.internal.RE;
 import org.apache.log4j.Logger;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +30,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -90,6 +94,23 @@ public class ActivityController extends BaseController {
         Assert.isTrue(activity.getSiteId().equals(site.getId()));
         activityService.addClick(activity.getId());
         return ResultUtil.ok(activity);
+    }
+
+    @SimpleLog
+    @RequiresPermissions("sys:activity:insert")
+    @RequestMapping("/saveActivity")
+    @ResponseBody
+    public Result saveActivity(Activity activity, HttpServletRequest request) {
+        Site site = getSite(request);
+        User user = getUser(request);
+        Assert.notNull(activity.getCategoryId());
+        activity.setUserId(user.getId());
+        activity.setSiteId(site.getId());
+        Date date = new Date();
+        activity.setInsertTime(date);
+        activity.setInsertTimeMs(date.getTime());
+        activityService.insert(activity);
+        return ResultUtil.ok();
     }
 
 }

@@ -16,6 +16,7 @@ import com.cxgt.entity.Site;
 import com.cxgt.service.ActivityService;
 import com.cxgt.service.ActivityUidService;
 import org.apache.log4j.Logger;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -78,6 +79,18 @@ public class ActivityUidController extends BaseController {
         activityUid.setInsertTime(date);
         activityUid.setInsertTimeMs(date.getTime());
         return null;
+    }
+
+    @SimpleLog
+    @RequiresPermissions("sys:activity_uid:update")
+    @RequestMapping("/updateStatus")
+    @ResponseBody
+    public Result updateStatus(Integer activityUidId, Integer status) {
+        ActivityUid activityUid = activityUidService.selectById(activityUidId);
+        Assert.notNull(activityUid);
+        activityUid.setStatus(status);
+        activityUidService.updateById(activityUid);
+        return ResultUtil.ok();
     }
 
 }

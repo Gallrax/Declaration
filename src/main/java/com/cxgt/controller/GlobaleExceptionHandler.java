@@ -29,7 +29,7 @@ public class GlobaleExceptionHandler {
     public String unauthorizedException(UnauthorizedException e) {
         LOG.error(" unauthorizedException : " + e.getMessage());
 //        e.printStackTrace();
-        return "admin/login/login";
+        return "redirect:/admin/login.html";
     }
 
     /**
@@ -43,7 +43,7 @@ public class GlobaleExceptionHandler {
     public String unauthenticatedException(UnauthenticatedException e) {
         LOG.error(" unauthenticatedException : " + e.getMessage());
 //        e.printStackTrace();
-        return "admin/login/login";
+        return "redirect:/admin/login.html";
     }
 
     @ExceptionHandler(PassportValidateException.class)

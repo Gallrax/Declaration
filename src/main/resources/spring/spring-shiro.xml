@@ -20,8 +20,7 @@
                 /admin/user/login = anon
                 /admin/user/logout =logout
                 /static/** = anon
-                /admin/**.js = anon
-                /admin/* = authc
+                /admin/** = authc
             </value>
         </property>
     </bean>

@@ -38,9 +38,9 @@
                 <li class="layui-nav-item layui-nav-itemed">
                     <a href="javascript:;">后台首页</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:;" data-url="/admin/index.html">资源管理</a></dd>
-                        <dd><a href="javascript:;" data-url="/admin/login.html">系列管理</a></dd>
                         <dd><a href="javascript:;" data-url="/admin/activity/activities.html">活动管理</a></dd>
+                        <dd><a href="javascript:;" data-url="/admin/series/series.html">系列管理</a></dd>
+                        <dd><a href="javascript:;" data-url="/admin/index.html">资源管理</a></dd>
                     </dl>
                 </li>
                 <%--<li class="layui-nav-item layui-nav-itemed">

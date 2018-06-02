@@ -21,6 +21,8 @@ import com.cxgt.service.ResourceService;
 import com.cxgt.service.SeriesService;
 import com.sun.xml.internal.rngom.parse.host.Base;
 import org.apache.log4j.Logger;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -132,5 +134,20 @@ public class SeriesController extends BaseController {
         resourceService.updateBatchById(resources);
         return ResultUtil.ok();
     }
+
+    @SimpleLog
+    @RequiresPermissions("sys:series:updateStatus")
+    @RequestMapping("/updateStatus")
+    @ResponseBody
+    public Result updateStatus(Integer seriesId, Integer status, HttpServletRequest request) {
+        Site site = getSite(request);
+        Series series = seriesService.selectById(seriesId);
+        Assert.notNull(series);
+        Assert.isTrue(series.getSiteId().equals(site.getId()));
+        series.setStatus(status);
+        seriesService.updateById(series);
+        return ResultUtil.ok();
+    }
+
 
 }

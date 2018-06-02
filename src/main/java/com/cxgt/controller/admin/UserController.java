@@ -1,7 +1,9 @@
 package com.cxgt.controller.admin;
 
 
+import cn.hutool.core.lang.Assert;
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.cxgt.commmon.annotaion.SimpleLog;
 import com.cxgt.commmon.constants.GlobalConstant;
 import com.cxgt.commmon.constants.ResultCodeEnum;
@@ -47,8 +49,6 @@ public class UserController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
     public Result login(String username, String password, HttpSession session) {
-        username = "tom";
-        password = "tom";
         Site site = new Site();
         site.setId(1);
         session.setAttribute(GlobalConstant.SESSION_SITE, site);
