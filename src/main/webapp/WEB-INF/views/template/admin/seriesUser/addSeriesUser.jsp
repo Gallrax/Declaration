@@ -1,8 +1,8 @@
 <%--
   Created by IntelliJ IDEA.
-  User: gao
-  Date: 2018/6/4
-  Time: 15:36
+  User: Administrator
+  Date: 2018/6/4 0004
+  Time: 21:25
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -12,43 +12,44 @@
     <link rel="stylesheet" href="/static/tools/layui/css/layui.css" media="all"/>
 </head>
 <body class="layui-layout-body">
-<div>
-    <form class="layui-form" style="width: 70%">
-        <input type="hidden" name="id" id="seriesUserId">
-        <div class="layui-form-item">
-            <label class="layui-form-label">奖项名称</label>
+<div class="layui-form-item">
+    <form id="addSeriesUser" class="layui-form" style="width: 70%">
+        <%--<div class="layui-form-item">
+            <label class="layui-form-label">输入框</label>
             <div class="layui-input-block">
-                <input type="text" name="name" placeholder="请输入" lay-verify="required" autocomplete="off"
-                       class="layui-input">
+                <input type="text" name="id" id="seriesUserId" class="layui-input">
+            </div>
+        </div>--%>
+        <div class="layui-form-item">
+            <label class="layui-form-label">专家</label>
+            <div class="layui-input-block">
+                <input type="checkbox" name="userIds" title="写作" checked="">
+                <input type="checkbox" name="userIds" title="阅读">
+                <input type="checkbox" name="userIds" title="游戏">
             </div>
         </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">奖项类型</label>
-            <div class="layui-input-block">
-                <input type="text" name="type" placeholder="请输入" lay-verify="required" autocomplete="off"
-                       class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <div class="layui-input-block">
-                <button class="layui-btn" lay-submit lay-filter="*">立即提交</button>
-                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-            </div>
-        </div>
+            <input type="button" title="刷新" onclick="reloadForm()"/>
+        <%--<input type="checkbox" name="写作" title="写作">
+        <input type="checkbox" name="写作" title="写作">
+        <input type="checkbox" name="写作" title="写作">
+        <input type="checkbox" name="写作" title="写作">--%>
     </form>
 </div>
 </body>
 </html>
 <script src="/static/tools/layui/layui.js"></script>
 <script>
+
+    var $;
+    var form;
     layui.use('form', function () {
-        var $ = layui.$;
-        var form = layui.form;
+        $ = layui.$;
+        form = layui.form;
 
         form.on('submit(*)', function (data) {
             console.log(data);
             $.ajax({
-                url: "/seriesUser/update",
+                url: "/seriesUser/insert",
                 type: "post",
                 data: data.field,
                 success: function (data) {
@@ -66,4 +67,10 @@
         });
 
     });
+
+    function reloadForm() {
+        console.log($(".layui-input-block").html());
+        form.render();
+        console.log($(".layui-input-block").html());
+    }
 </script>

@@ -44,7 +44,7 @@
                         <shiro:hasRole name="manager">
                             <dd><a href="javascript:;" data-url="/admin/activity/activities.html">活动管理</a></dd>
                         </shiro:hasRole>
-                        <shiro:hasAnyRoles name="auditor, specialist">
+                        <shiro:hasAnyRoles name="auditor, specialist, manager">
                             <dd><a href="javascript:;" data-url="/admin/series/series.html">系列管理</a></dd>
                         </shiro:hasAnyRoles>
                         <%--<dd><a href="javascript:;" data-url="/admin/index.html">资源管理</a></dd>--%>

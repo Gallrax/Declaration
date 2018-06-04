@@ -1,3 +1,4 @@
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <%--
   Created by IntelliJ IDEA.
   User: Administrator
@@ -21,12 +22,17 @@
 <script src="/static/tools/layui/layui.js"></script>
 <script src="/static/tools/layui/lay/modules/laytpl.js"></script>
 <script>
+    var $;
+    var table;
+    var form;
     layui.use('table', function () {
-        var table = layui.table;
+        $ = layui.$;
+        table = layui.table;
+        form = layui.form;
 
         table.render({
             elem: "#series",
-            url: "/series/series?status=0",
+            url: "/series/series",
             page: true,
             cols: [[ //表头
                 {field: 'id', title: 'ID', fixed: 'left'},
@@ -35,7 +41,7 @@
                 {field: 'company', title: '单位'},
                 {field: 'author', title: '作者'},
                 {field: 'insertTime', title: '创建时间'},
-                {field: 'tool', title: '操作', toolbar:'#barDemo'}
+                {field: 'tool', title: '操作', toolbar: '#barDemo'}
             ]],
             request: {
                 pageName: 'current',
@@ -54,46 +60,21 @@
             }
         });
 
-        table.on('tool(series)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+        table.on('tool(series)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
             var data = obj.data; //获得当前行数据
             var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
             var tr = obj.tr; //获得当前行 tr 的DOM对象
 
-            if(layEvent === 'detail'){ //查看
-                console.log(data.status);
-                //do somehing
-                /**
-                 如果是iframe层
-                 */
-                toAward(data);
-            } else if(layEvent === 'del'){ //删除
-                layer.confirm('真的删除行么', function(index){
-                    obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-                    layer.close(index);
-                    //向服务端发送删除指令
+            if (layEvent === 'audit') { //查看
+                layer.confirm('确定要通过审核么', function (index) {
+                    console.log(data.id);
+                    audit(data.id);
                 });
-            } else if(layEvent === 'edit'){ //编辑
-                //do something
-                console.log(data);
-                //同步更新缓存对应的值
-                obj.update({
-                    username: '123'
-                    ,title: 'xxx'
-                });
-            }else if(layEvent === 'check'){ //审核通过
-                //do something
-                console.log(data);
-                layer.confirm('确定要通过审核么', function(index){
-                    check(data.id, obj);
-                    //obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-                    layer.close(index);
-                    //向服务端发送删除指令
-                });
-                //同步更新缓存对应的值
-                obj.update({
-                    username: '123'
-                    ,title: 'xxx'
-                });
+            } else if (layEvent == 'assess') {
+                assess(data);
+            } else if (layEvent === 'distribute') {
+                //审核通过
+                distribute(data);
             }
         });
     });
@@ -101,48 +82,104 @@
 <script type="text/html" id="barDemo">
     <!-- 这里同样支持 laytpl 语法，如： -->
 
-    <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
+    <%--<a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>--%>
 
-    {{#  if(d.status == 0){ }}
-    <a class="layui-btn layui-btn-xs" lay-event="check">审核</a>
-    {{#  } }}
+    <shiro:hasAnyRoles name="auditor">
+        {{# if(d.status == 0){ }}
+        <a class="layui-btn layui-btn-xs" lay-event="audit">审核通过</a>
+        {{# } }}
+    </shiro:hasAnyRoles>
+    <shiro:hasAnyRoles name="specialist">
+        <a class="layui-btn layui-btn-xs" lay-event="assess">评分</a>
+    </shiro:hasAnyRoles>
+    <shiro:hasAnyRoles name="manager">
+        <a class="layui-btn layui-btn-xs" lay-event="distribute">分配</a>
+    </shiro:hasAnyRoles>
 
 </script>
-<script>
-    //主动加载jquery模块
-    function check(seriesId, obj) {
-        layui.use(['jquery', 'layer'], function(){
-            var $ = layui.$ //重点处
-                ,layer = layui.layer;
-
-            //后面就跟你平时使用jQuery一样
-            $.getJSON("/series/updateStatus?seriesId=" + seriesId + "&status=" + 1, function (data) {
-                if(data.code == 200){
-                    layer.msg("审核成功");
-                    obj.del();
-                }else{
-                    layer.msg("审核失败");
+<shiro:hasAnyRoles name="auditor">
+    <script>
+        function audit(seriesId) {
+            $.ajax({
+                url: "/series/updateStatus?seriesId=" + seriesId + "&status=1",
+                type: "post",
+                success: function (data) {
+                    console.log(data);
+                    var result = $.parseJSON(data);
+                    if (result.code == 200) {
+                        layer.msg("审核成功");
+                        table.reload("series");
+                    } else {
+                        layer.msg("审核失败");
+                    }
+                }
+            })
+        }
+    </script>
+</shiro:hasAnyRoles>
+<shiro:hasAnyRoles name="specialist">
+    <script>
+        function assess(data) {
+            var id = data.id;
+            $.ajax({
+                url: "/seriesUser/" + id,
+                type: "get",
+                success: function (data) {
+                    var result = $.parseJSON(data);
+                    if (result.code == 200) {
+                        layer.open({
+                            type: 2,
+                            area: ['50%', '50%'],
+                            title: '评奖',
+                            content: '/admin/seriesUser/updateSeriesUser.html', //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                            success: function (layero, index) {
+                                var body = layer.getChildFrame('body', index);
+                                body.find('#seriesUserId').val(id);
+                            }
+                        });
+                    } else {
+                        layer.msg("出现异常");
+                    }
+                }
+            })
+        }
+    </script>
+</shiro:hasAnyRoles>
+<shiro:hasAnyRoles name="manager">
+    <script>
+        function distribute(data) {
+            var id = data.id;
+            layer.open({
+                type: 2,
+                area: ['50%', '50%'],
+                title: '分配',
+                content: '/admin/seriesUser/addSeriesUser.html', //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                success: function (layero, index) {
+                    var body = layer.getChildFrame('body', index);
+                    console.log(body.contents());
+                    $.ajax({
+                        url: "/admin/user/users",
+                        type: "get",
+                        success: function (data) {
+                            var result = $.parseJSON(data);
+                            if (result.code == 200) {
+                                var tempStr = "";
+                                for (var i in result.data.records) {
+                                    tempStr += "<input type=\"checkbox\" name=\"userIds\" title=\"" + result.data.records[i].name + "\" value=\"" + result.data.records[i].id + "\">";
+                                }
+                                console.log(tempStr);
+                                body.find(".layui-input-block").html(tempStr);
+                                form.render();
+                                //无效
+                                console.log(body.find(".layui-input-block").html());
+                                form.render();
+                            }
+                        }
+                    })
                 }
             });
-        });
-    }
-</script>
-<script>
-    function toAward(data) {
-        var id = data.id;
-        layer.open({
-            type: 2,
-            area: ['50%', '50%'],
-            title: '评奖',
-            content: '/admin/seriesUser/updateSeriesUser.html', //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
-            success: function(layero, index){
-                var body = layer.getChildFrame('body', index);
-//                var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
-//                console.log(body.html()) //得到iframe页的body内容
-                body.find('#series').val(id);
-            }
-        });
-    }
-</script>
+        }
+    </script>
+</shiro:hasAnyRoles>

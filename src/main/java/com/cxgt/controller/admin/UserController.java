@@ -1,9 +1,8 @@
 package com.cxgt.controller.admin;
 
 
-import cn.hutool.core.lang.Assert;
 import com.alibaba.fastjson.JSON;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.cxgt.commmon.annotaion.SimpleLog;
 import com.cxgt.commmon.constants.GlobalConstant;
 import com.cxgt.commmon.constants.ResultCodeEnum;
@@ -17,15 +16,12 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
-import org.apache.shiro.authz.annotation.RequiresUser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -67,12 +63,12 @@ public class UserController {
     }
 
     @RequestMapping("/users")
-    @RequiresUser
+    @RequiresRoles("manager")
     @ResponseBody
     @SimpleLog
-    public List<User> users() {
-        List<User> users = userService.selectList(null);
-        return users;
+    public Result users(Page page) {
+        Page tempPage = userService.selectPage(page, null);
+        return ResultUtil.ok(page);
     }
 
     @SimpleLog

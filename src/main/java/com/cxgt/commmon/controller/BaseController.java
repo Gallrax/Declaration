@@ -1,14 +1,12 @@
 package com.cxgt.commmon.controller;
 
 import cn.hutool.core.lang.Assert;
-import cn.hutool.core.util.ObjectUtil;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.cxgt.commmon.constants.GlobalConstant;
 import com.cxgt.entity.*;
 import com.cxgt.service.ActivityService;
 import com.cxgt.service.CategoryService;
 import com.cxgt.service.SeriesService;
-import com.cxgt.service.SeriesUserService;
+import com.cxgt.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -79,6 +77,21 @@ public abstract class BaseController {
         Series series = seriesService.selectById(seriesId);
         Assert.notNull(series);
         Assert.isTrue(series.getSiteId().equals(getSite(request).getId()));
+    }
+
+    protected boolean checkUser(Integer userId, UserService userService, HttpServletRequest request) {
+        try {
+            assertUser(userId, userService, request);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    protected void assertUser(Integer userId, UserService userService, HttpServletRequest request) {
+        User user = userService.selectById(userId);
+        Assert.notNull(user);
+        Assert.isTrue(user.getSiteId().equals(getSite(request).getId()));
     }
 
 }

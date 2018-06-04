@@ -19,15 +19,12 @@ import com.cxgt.service.ActivityService;
 import com.cxgt.service.CategoryService;
 import com.cxgt.service.ResourceService;
 import com.cxgt.service.SeriesService;
-import com.sun.xml.internal.rngom.parse.host.Base;
 import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -86,7 +83,9 @@ public class SeriesController extends BaseController {
                 return ResultUtil.ok(page);
             }
         }
-        wrapper.eq("status", ObjectUtil.isNotNull(status) && ObjectUtil.isNotNull(user) ? status : GlobalConstant.STATUS_ABLE);
+        //前台只能查审核通过的。后台默认查所有
+        if (ObjectUtil.isNull(user) || (ObjectUtil.isNotNull(status) && ObjectUtil.isNotNull(user)))
+            wrapper.eq("status", ObjectUtil.isNotNull(status) && ObjectUtil.isNotNull(user) ? status : GlobalConstant.STATUS_ABLE);
         //TODO:uid search 需求待定(后台开发再考虑)
         Page<Series> seriesPage = seriesService.selectPage(page, wrapper);
         return ResultUtil.ok(seriesPage);
