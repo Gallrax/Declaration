@@ -8,6 +8,7 @@ import com.cxgt.entity.*;
 import com.cxgt.service.ActivityService;
 import com.cxgt.service.CategoryService;
 import com.cxgt.service.SeriesService;
+import com.cxgt.service.SeriesUserService;
 
 import javax.servlet.http.HttpServletRequest;
 

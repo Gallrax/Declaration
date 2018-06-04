@@ -46,4 +46,14 @@ public class IndexController extends BaseController {
         return "template/admin/series/seriesInfo";
     }
 
+    @RequestMapping("/seriesUser/addSeriesUser.html")
+    public String addSeriesUser() {
+        return "template/admin/seriesUser/addSeriesUser";
+    }
+
+    @RequestMapping("/seriesUser/updateSeriesUser.html")
+    public String updateSeriesUser() {
+        return "template/admin/seriesUser/updateSeriesUser";
+    }
+
 }
