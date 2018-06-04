@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <%--
   Created by IntelliJ IDEA.
   User: Administrator
@@ -6,6 +8,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page isELIgnored="false" %>
 <html>
 <head>
     <title>Title</title>
@@ -20,14 +23,14 @@
             <li class="layui-nav-item">
                 <a href="javascript:;">
                     <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
-                    贤心
+                    ${SESSION_USER.name}
                 </a>
                 <dl class="layui-nav-child">
                     <dd><a href="">基本资料</a></dd>
                     <dd><a href="">安全设置</a></dd>
                 </dl>
             </li>
-            <li class="layui-nav-item"><a href="">退出</a></li>
+            <li class="layui-nav-item"><a href="/admin/user/logout">退出</a></li>
         </ul>
     </div>
 
@@ -38,9 +41,13 @@
                 <li class="layui-nav-item layui-nav-itemed">
                     <a href="javascript:;">后台首页</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:;" data-url="/admin/activity/activities.html">活动管理</a></dd>
-                        <dd><a href="javascript:;" data-url="/admin/series/series.html">系列管理</a></dd>
-                        <dd><a href="javascript:;" data-url="/admin/index.html">资源管理</a></dd>
+                        <shiro:hasRole name="manager">
+                            <dd><a href="javascript:;" data-url="/admin/activity/activities.html">活动管理</a></dd>
+                        </shiro:hasRole>
+                        <shiro:hasAnyRoles name="auditor, specialist">
+                            <dd><a href="javascript:;" data-url="/admin/series/series.html">系列管理</a></dd>
+                        </shiro:hasAnyRoles>
+                        <%--<dd><a href="javascript:;" data-url="/admin/index.html">资源管理</a></dd>--%>
                     </dl>
                 </li>
                 <%--<li class="layui-nav-item layui-nav-itemed">
@@ -72,7 +79,7 @@
             </ul>--%>
             <div class="layui-tab-content" style="min-height: 150px; padding: 5px 0 0 0;">  <!-- tab选项卡内容 -->
                 <div class="layui-tab-item layui-show">
-                    <iframe id="tempIframe" src="/admin/login.html" width="100%" height="100%"></iframe>
+                    <iframe id="tempIframe" width="100%" height="100%"></iframe>
                 </div>
             </div>
         </div>
@@ -101,30 +108,30 @@
             }
         });
 
-        $('.site-demo-active').on('click', function(){
+        $('.site-demo-active').on('click', function () {
             var othis = $(this), type = othis.data('type');
             active[type] ? active[type].call(this, othis) : '';
         });
 
         //触发事件
         var active = {
-            tabAdd: function(){
+            tabAdd: function () {
                 //新增一个Tab项
                 element.tabAdd('demo', {
-                    title: '新选项'+ (Math.random()*1000|0) //用于演示
-                    ,content: '内容'+ (Math.random()*1000|0)
-                    ,id: new Date().getTime() //实际使用一般是规定好的id，这里以时间戳模拟下
+                    title: '新选项' + (Math.random() * 1000 | 0) //用于演示
+                    , content: '内容' + (Math.random() * 1000 | 0)
+                    , id: new Date().getTime() //实际使用一般是规定好的id，这里以时间戳模拟下
                 })
                 console.log("-");
             }
-            ,tabDelete: function(othis){
+            , tabDelete: function (othis) {
                 //删除指定Tab项
                 element.tabDelete('demo', '1'); //删除：“商品管理”
 
 
                 othis.addClass('layui-btn-disabled');
             }
-            ,tabChange: function(){
+            , tabChange: function () {
                 //切换到指定Tab项
                 element.tabChange('demo', '2'); //切换到：用户管理
             }
