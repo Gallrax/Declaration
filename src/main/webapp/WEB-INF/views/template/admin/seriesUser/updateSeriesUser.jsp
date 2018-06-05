@@ -15,6 +15,7 @@
 <div>
     <form class="layui-form" style="width: 70%">
         <input type="hidden" name="id" id="seriesUserId">
+        <input type="hidden" name="seriesId" id="seriesId">
         <div class="layui-form-item">
             <label class="layui-form-label">奖项名称</label>
             <div class="layui-input-block">

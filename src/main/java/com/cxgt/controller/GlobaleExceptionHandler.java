@@ -1,6 +1,9 @@
 package com.cxgt.controller;
 
+import com.cxgt.commmon.constants.ResultCodeEnum;
 import com.cxgt.commmon.exception.PassportValidateException;
+import com.cxgt.commmon.util.ResultUtil;
+import com.cxgt.commmon.vo.Result;
 import org.apache.log4j.Logger;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
@@ -55,8 +58,8 @@ public class GlobaleExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     @ResponseBody
-    public String exception(Exception e) {
+    public Result exception(Exception e) {
         e.printStackTrace();
-        return null;
+        return ResultUtil.fail(ResultCodeEnum.UNAUTHORIZED);
     }
 }

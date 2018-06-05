@@ -38,8 +38,8 @@
                 {field: 'place', title: '地点'},
                 {field: 'hoster', title: '发起者'},
                 {field: 'beginTime', title: '开始时间'},
-                {field: 'endTime', title: '结束时间'},
-                {field: 'tool', title: '操作', toolbar: '#barDemo'}
+                {field: 'endTime', title: '结束时间'}
+                // {field: 'tool', title: '操作', toolbar: '#barDemo'}
             ]],
             request: {
                 pageName: 'current',

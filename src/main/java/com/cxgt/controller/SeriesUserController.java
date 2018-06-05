@@ -49,7 +49,7 @@ public class SeriesUserController extends BaseController {
     @RequiresPermissions("sys:series_user:update")
     @RequestMapping("/{id}")
     @ResponseBody
-    public Result seriesUser(@PathVariable Integer seriesId, HttpServletRequest request) {
+    public Result seriesUser(@PathVariable("id") Integer seriesId, HttpServletRequest request) {
         User user = getUser(request);
         Series series = seriesService.selectById(seriesId);
         checkSeries(seriesId, seriesService, request);
@@ -66,6 +66,8 @@ public class SeriesUserController extends BaseController {
         Integer seriesUserId = seriesUser.getId();
         SeriesUser tempSeriesUser = seriesUserService.selectById(seriesUserId);
         Assert.notNull(tempSeriesUser);
+        User user = userService.selectById(tempSeriesUser.getUserId());
+        checkUser(tempSeriesUser.getUserId(), userService, request);
         Series series = seriesService.selectById(seriesUser.getSeriesId());
         checkSeries(series.getId(), seriesService, request);
         seriesUserService.updateById(seriesUser);

@@ -75,6 +75,8 @@
             } else if (layEvent === 'distribute') {
                 //审核通过
                 distribute(data);
+            } else if (layEvent == 'detail') {
+                detail(data);
             }
         });
     });
@@ -85,6 +87,8 @@
     <%--<a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>--%>
+
+    <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
 
     <shiro:hasAnyRoles name="auditor">
         {{# if(d.status == 0){ }}
@@ -98,6 +102,21 @@
         <a class="layui-btn layui-btn-xs" lay-event="distribute">分配</a>
     </shiro:hasAnyRoles>
 
+</script>
+<script>
+    function detail(data) {
+        var seriesId = data.id;
+        $.ajax({
+            url: "/seriesUser/" + seriesId,
+            type: "get",
+            success: function (data) {
+                var result = $.parseJSON(data);
+                if (result.code == 200) {
+                    layer.msg(result.data.name);
+                }
+            }
+        })
+    }
 </script>
 <shiro:hasAnyRoles name="auditor">
     <script>
@@ -122,12 +141,14 @@
 <shiro:hasAnyRoles name="specialist">
     <script>
         function assess(data) {
-            var id = data.id;
+            console.log(data);
+            var seriesId = data.id;
             $.ajax({
-                url: "/seriesUser/" + id,
+                url: "/seriesUser/" + seriesId,
                 type: "get",
                 success: function (data) {
                     var result = $.parseJSON(data);
+                    console.log(result);
                     if (result.code == 200) {
                         layer.open({
                             type: 2,
@@ -136,11 +157,12 @@
                             content: '/admin/seriesUser/updateSeriesUser.html', //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
                             success: function (layero, index) {
                                 var body = layer.getChildFrame('body', index);
-                                body.find('#seriesUserId').val(id);
+                                body.find('#seriesUserId').val(result.data.id);
+                                body.find('#seriesId').val(seriesId);
                             }
                         });
                     } else {
-                        layer.msg("出现异常");
+                        layer.msg(result.message);
                     }
                 }
             })
@@ -150,7 +172,7 @@
 <shiro:hasAnyRoles name="manager">
     <script>
         function distribute(data) {
-            var id = data.id;
+            var seriesId = data.id;
             layer.open({
                 type: 2,
                 area: ['50%', '50%'],
@@ -158,7 +180,6 @@
                 content: '/admin/seriesUser/addSeriesUser.html', //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
                 success: function (layero, index) {
                     var body = layer.getChildFrame('body', index);
-                    console.log(body.contents());
                     $.ajax({
                         url: "/admin/user/users",
                         type: "get",
@@ -167,14 +188,13 @@
                             if (result.code == 200) {
                                 var tempStr = "";
                                 for (var i in result.data.records) {
-                                    tempStr += "<input type=\"checkbox\" name=\"userIds\" title=\"" + result.data.records[i].name + "\" value=\"" + result.data.records[i].id + "\">";
+                                    tempStr += "<input type=\"checkbox\" name=\"userIds\" title=\"" + result.data.records[i].name + "\" value=\"" + result.data.records[i].id + "\" lay-skin=\"primary\">";
                                 }
                                 console.log(tempStr);
-                                body.find(".layui-input-block").html(tempStr);
-                                form.render();
-                                //无效
-                                console.log(body.find(".layui-input-block").html());
-                                form.render();
+                                body.find("#users").prepend(tempStr);
+                                body.find("#seriesId").val(seriesId);
+                                var childiFrame = window['layui-layer-iframe' + index];
+                                childiFrame.reloadForm();
                             }
                         }
                     })

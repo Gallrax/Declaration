@@ -20,19 +20,13 @@
                 <input type="text" name="id" id="seriesUserId" class="layui-input">
             </div>
         </div>--%>
-        <div class="layui-form-item">
+        <input type="hidden" name="seriesId" id="seriesId">
+        <div class="layui-form-item" lay-filter="users">
             <label class="layui-form-label">专家</label>
-            <div class="layui-input-block">
-                <input type="checkbox" name="userIds" title="写作" checked="">
-                <input type="checkbox" name="userIds" title="阅读">
-                <input type="checkbox" name="userIds" title="游戏">
+            <div id="users" class="layui-input-block">
+                <button class="layui-btn" lay-submit="" lay-filter="*">立即提交</button>
             </div>
         </div>
-            <input type="button" title="刷新" onclick="reloadForm()"/>
-        <%--<input type="checkbox" name="写作" title="写作">
-        <input type="checkbox" name="写作" title="写作">
-        <input type="checkbox" name="写作" title="写作">
-        <input type="checkbox" name="写作" title="写作">--%>
     </form>
 </div>
 </body>
@@ -47,11 +41,10 @@
         form = layui.form;
 
         form.on('submit(*)', function (data) {
-            console.log(data);
             $.ajax({
                 url: "/seriesUser/insert",
                 type: "post",
-                data: data.field,
+                data: $("#addSeriesUser").serialize(),
                 success: function (data) {
                     var result = $.parseJSON(data);
                     if (result.code == 200) {
@@ -68,9 +61,9 @@
 
     });
 
+    //父iframe调用此方法刷新form
     function reloadForm() {
-        console.log($(".layui-input-block").html());
+        console.log("1");
         form.render();
-        console.log($(".layui-input-block").html());
     }
 </script>
