@@ -10,8 +10,8 @@
 <head>
     <title>Title</title>
 </head>
-<link href="/static/template/common/css/global.css" type="text/css" rel="stylesheet" />
-<link href="/static/template/common/css/video_deta.css" type="text/css" rel="stylesheet" />
+<link href="/static/template/common/css/global.css" type="text/css" rel="stylesheet"/>
+<link href="/static/template/common/css/video_deta.css" type="text/css" rel="stylesheet"/>
 <body>
 <div class="videoBox" style="right:395px;">
     <div class="playTop">
@@ -53,11 +53,11 @@
         if (r != null) return unescape(r[2]);
         return null;
     }
-    
+
     function playVideo(records) {
         var playHtml = "<video controls=\"controls\" autoplay=\"autoplay\" width=\"100%;\">\n" +
-            "  <source src=\""+records.logo+"\" type=\"video/ogg\" />\n" +
-            "  <source src=\""+records.fileRoute+"\" type=\"video/mp4\" />\n" +
+            "  <source src=\"" + records.logo + "\" type=\"video/ogg\" />\n" +
+            "  <source src=\"" + records.fileRoute + "\" type=\"video/mp4\" />\n" +
             "Your browser does not support the video tag.\n" +
             "</video>";
         $(".videoPlay").html(playHtml);
@@ -65,17 +65,17 @@
 
     //刷新上一集下一集
     function refresh(result, index) {
-        for(var i = 0; i < result.length; i ++){
+        for (var i = 0; i < result.length; i++) {
             var cur_resource = result[index];
-            $(".playTop .py_thide").html("<span>第"+(index + 1) +"集</span>" + cur_resource.name);
-            if(index >= 1){
+            $(".playTop .py_thide").html("<span>第" + (index + 1) + "集</span>" + cur_resource.name);
+            if (index >= 1) {
                 var pre_resource = result[index - 1];
-                $(".playTop .py_pre").attr("href", "/resourceInfo.html?resourceId="+pre_resource.id+"&seriesId=" + seriesId);
+                $(".playTop .py_pre").attr("href", "/resourceInfo.html?resourceId=" + pre_resource.id + "&seriesId=" + seriesId);
                 $(".playTop .py_pre").html(pre_resource.name);
             }
-            if(index < result.length - 1){
+            if (index < result.length - 1) {
                 var down_resource = result[index + 1];
-                $(".playTop .py_next").attr("href", "/resourceInfo.html?resourceId="+down_resource.id+"&seriesId=" + seriesId);
+                $(".playTop .py_next").attr("href", "/resourceInfo.html?resourceId=" + down_resource.id + "&seriesId=" + seriesId);
                 $(".playTop .py_next").html(down_resource.name);
             }
         }
@@ -83,13 +83,14 @@
 
     //列表HTML
     var resourceHtml = "";
-    function writeResourceListHtml(records){
-        resourceHtml += "<li><a href=\"/resourceInfo.html?resourceId="+records.id+"&seriesId="+seriesId+"\"><b></b>"+records.name+"</a></li>";
+
+    function writeResourceListHtml(records) {
+        resourceHtml += "<li><a href=\"/resourceInfo.html?resourceId=" + records.id + "&seriesId=" + seriesId + "\"><b></b>" + records.name + "</a></li>";
     }
 
     //右上角HTML
     function writeIntroHtml(records) {
-        var introHtml = "<h4><a href=\"javascript:;\">"+records.name+"</a></h4>";
+        var introHtml = "<h4><a href=\"javascript:;\">" + records.name + "</a></h4>";
         getSeries(introHtml);
     }
 
@@ -102,7 +103,7 @@
             dataType: "json",
             success: function (data) {
                 if (data.code == 200) {
-                    introHtml += "<p>主讲人："+data.data.author+"</p><p>学校："+data.data.company+"</p>";
+                    introHtml += "<p>主讲人：" + data.data.author + "</p><p>学校：" + data.data.company + "</p>";
                     $(".intro").html(introHtml);
                 } else {
                     alert('数据加载失败...');
@@ -123,11 +124,11 @@
             }
         });
     }*/
-    
+
     var seriesId = getUrlParam("seriesId");
     var resourceId = getUrlParam("resourceId");
     //加载右侧列表
-    $(function(){
+    $(function () {
         $.ajax({
             type: "GET",
             url: "/resource/resources?seriesId=" + seriesId,
@@ -137,14 +138,15 @@
             success: function (data) {
                 if (data.code == 200) {
                     var result = data.data.records;
-                    for(var i = 0; i < result.length; i ++){
+                    for (var i = 0; i < result.length; i++) {
                         var records = result[i];
-                        if(resourceId == records.id){
+                        if (resourceId == records.id) {
                             playVideo(records);
-                            resourceHtml += "<li class=\"cur\"><a href=\"/resourceInfo.html?resourceId="+records.id+"&seriesId="+seriesId+"\"><b></b>"+records.name+"</a></li>";
+                            resourceHtml += "<li class=\"cur\"><a href=\"/resourceInfo.html?resourceId=" + records.id + "&seriesId=" + seriesId + "\"><b></b>" + records.name + "</a></li>";
                             writeIntroHtml(records);
                             refresh(result, i);
-                        }else{
+                        } else {
+                            if (resourceId == null && i == 0) playVideo(records);
                             writeResourceListHtml(records);
                         }
                     }
@@ -161,30 +163,30 @@
 <script type="text/javascript">
 
     //笔记、评论 video播放
-    $('document').ready(function(){
+    $('document').ready(function () {
 
-        $(function(){
-            function tabs(tabTit,on,tabCon){
-                $(tabTit).children().click(function(){
+        $(function () {
+            function tabs(tabTit, on, tabCon) {
+                $(tabTit).children().click(function () {
                     $(this).addClass(on).siblings().removeClass(on);
                     var index = $(tabTit).children().index(this);
                     $(tabCon).children().eq(index).show().siblings().hide();
                 });
             };
-            tabs(".tabel_title","cur",".tabel_content");
+            tabs(".tabel_title", "cur", ".tabel_content");
         });
 
     });
 
     //video播放右边开关
-    $('.py_leftbtn').toggle(function(){
+    $('.py_leftbtn').toggle(function () {
         $(this).addClass('py_rightbtn');
-        $('.videoBox').animate({'right':0});
-        $('.dire').animate({'right':-395});
-    },function(){
+        $('.videoBox').animate({'right': 0});
+        $('.dire').animate({'right': -395});
+    }, function () {
         $(this).removeClass('py_rightbtn');
-        $('.videoBox').animate({'right':395});
-        $('.dire').animate({'right':0});
+        $('.videoBox').animate({'right': 395});
+        $('.dire').animate({'right': 0});
     });
 
 </script>

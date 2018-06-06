@@ -21,10 +21,15 @@
             </div>
         </div>--%>
         <input type="hidden" name="seriesId" id="seriesId">
-        <div class="layui-form-item" lay-filter="users">
+        <div class="layui-form-item" lay-filter="users" style="height: 30%;">
             <label class="layui-form-label">专家</label>
             <div id="users" class="layui-input-block">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
                 <button class="layui-btn" lay-submit="" lay-filter="*">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
             </div>
         </div>
     </form>
@@ -46,6 +51,7 @@
                 type: "post",
                 data: $("#addSeriesUser").serialize(),
                 success: function (data) {
+                    console.log(data);
                     var result = $.parseJSON(data);
                     if (result.code == 200) {
                         layer.alert("发布成功");
