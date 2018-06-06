@@ -60,7 +60,7 @@ public class ResourceController extends BaseController {
         Assert.isTrue(series.getSiteId().equals(site.getId()));
         Page<Resource> resourcePage = resourceService.selectPage(page, new EntityWrapper<Resource>().eq("series_id", series.getId()));
         List<Resource> resourceList = new ArrayList<>();
-        /*for (Resource resource : resourcePage.getRecords()) {
+        for (Resource resource : resourcePage.getRecords()) {
             if (StrUtil.isNotEmpty(resource.getFileRoute())) continue;
             String objectid = resource.getObjectid();
             String result = HttpUtil.get("http://cs.ananas.chaoxing.com/status/" + objectid);
@@ -70,7 +70,7 @@ public class ResourceController extends BaseController {
                 resourceList.add(resource);
             }
         }
-        if (CollectionUtil.isNotEmpty(resourceList)) resourceService.updateBatchById(resourceList);*/
+        if (CollectionUtil.isNotEmpty(resourceList)) resourceService.updateBatchById(resourceList);
         return ResultUtil.ok(resourcePage);
     }
 
