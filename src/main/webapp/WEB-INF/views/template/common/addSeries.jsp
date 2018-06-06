@@ -63,8 +63,8 @@
                 <li>
                     <div class="form_title"><span>*</span>文件格式：</div>
                     <select name="fileType" class="form_select">
-                        <option>图片</option>
-                        <%--<option>视频</option>--%>
+                        <%--<option>图片</option>--%>
+                        <option>视频</option>
                     </select>
                     <div class="prompt_div">
                         <div class="prompt_text"><b class="icons"></b>*号为必填信息</div>
