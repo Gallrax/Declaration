@@ -83,17 +83,34 @@ public class IndexController extends BaseController {
     @ResponseBody
     public Result upload(@RequestParam(required = true) MultipartFile[] files, HttpServletRequest request) throws IOException {
         List<File> tempFiles = new ArrayList<File>();
+        List<Resource> resources = new ArrayList<>();
+        int i = 0;
         for (MultipartFile file : files) {
             String path = request.getServletContext().getRealPath("/static/upload");
             String filename = System.currentTimeMillis() + file.getOriginalFilename();
             File tempFile = new File(path + "/" + filename);
             file.transferTo(tempFile);
             tempFiles.add(tempFile);
+
+            //2018-06-06 暂时修改
+            //增加Resource,返回无状态Resource,提交Series时再进行绑定
+            //System.currentTimeMillis() 得到的是13位数字，因此砍掉
+            Resource resource = new Resource();
+            resource.setName(tempFile.getName().substring(13));
+            resource.setFileRoute("/static/upload/"+ filename);
+//            resource.setObjectid(objectid);
+            resource.setFileSize(tempFile.length());
+            Date date = new Date();
+            resource.setInsertTime(date);
+            resource.setInsertTimeMs(date.getTime());
+            resource.setSiteId(getSite(request).getId());
+//            resource.setSort(++i);
+            resources.add(resource);
         }
         //生成资源List
-        List<Resource> resources = new ArrayList<>();
         //设置排序
-        int i = 0;
+        //2018-06-06 暂时隐藏
+        /*int i = 0;
         for (File tempFile : tempFiles) {
             HashMap<String, Object> fileHashMap = new HashMap<>();
             fileHashMap.put("file", tempFile);
@@ -115,7 +132,7 @@ public class IndexController extends BaseController {
                 resource.setSort(++i);
                 resources.add(resource);
             }
-        }
+        }*/
         //自动注入id
         resourceService.insertBatch(resources);
         return ResultUtil.ok(resources);
