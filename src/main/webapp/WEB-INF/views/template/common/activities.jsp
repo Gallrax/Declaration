@@ -22,7 +22,7 @@
     $(function () {
         $.ajax({
             type: "GET",
-            url: "/activity/activities?categoryId=" + globalCategoryId,
+            url: "/activity/activities?categoryId=" + globalCategoryId + "&size=10&current=" + globalPageIndex,
             //data: {},
             async: false,
             dataType: "json",
