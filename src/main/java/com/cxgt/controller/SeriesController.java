@@ -87,7 +87,7 @@ public class SeriesController extends BaseController {
         if (ObjectUtil.isNull(user) || (ObjectUtil.isNotNull(status) && ObjectUtil.isNotNull(user)))
             wrapper.eq("status", ObjectUtil.isNotNull(status) && ObjectUtil.isNotNull(user) ? status : GlobalConstant.STATUS_ABLE);
         //TODO:uid search 需求待定(后台开发再考虑)
-        Page<Series> seriesPage = seriesService.selectPage(page, wrapper);
+        Page<Series> seriesPage = seriesService.selectPage(page, wrapper.orderBy("id", false));
         return ResultUtil.ok(seriesPage);
     }
 
