@@ -14,7 +14,7 @@
 <link type="text/css" rel="stylesheet" href="/static/template/common/css/global.css"/>
 <link type="text/css" rel="stylesheet" href="/static/template/common/css/style.css"/>
 <script type="text/javascript" src="/static/template/common/js/jquery-1.7.2.min.js"></script>
-<script type="text/javascript" src="http://passport.sdlll.net/header?id=1"></script>
+<%--<script type="text/javascript" src="http://passport.sdlll.net/header?id=1"></script>--%>
 
 
 <div class="main_box wrap1080 clearfix">
@@ -30,7 +30,7 @@
 </div>
 </body>
 </html>
-<script type="text/javascript" src="http://passport.sdlll.net/footer.shtml" charset="utf-8"></script>
+<%--<script type="text/javascript" src="http://passport.sdlll.net/footer.shtml" charset="utf-8"></script>--%>
 <script type="text/javascript" src="/static/template/common/js/com_index.js"></script>
 <script language="javascript">
 

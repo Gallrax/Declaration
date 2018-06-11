@@ -155,7 +155,7 @@
         var formData = new FormData();
         var files = $("#file").get(0).files;
         console.log(files);
-        if(files.length == 0) return false;
+        if (files.length == 0) return false;
         for (var i in files) {
             $("#tempResourceName").val(files[i].name);
             formData.append("files", files[i]);
@@ -163,9 +163,16 @@
         $.ajax({
             url: "/upload",
             type: "post",
+            data: formData,
             contentType: false,
             processData: false,
-            data: formData,
+            xhr: function () {
+                var myXhr = $.ajaxSettings.xhr();
+                if (myXhr.upload) {
+                    myXhr.upload.addEventListener("progress", writeProgress, false);
+                }
+                return myXhr;
+            },
             success: function (data) {
                 var result = $.parseJSON(data);
                 console.log(result);
@@ -173,9 +180,9 @@
                     console.log(result.data);
                     var tempStr = "";
                     var tempResourceIds = "";
-                    for(var i in result.data){
-                        tempStr += result.data[i].name +",";
-                        tempResourceIds += result.data[i].id +",";
+                    for (var i in result.data) {
+                        tempStr += result.data[i].name + ",";
+                        tempResourceIds += result.data[i].id + ",";
                     }
                     console.log(tempStr);
                     console.log(tempResourceIds);
@@ -184,5 +191,13 @@
                 }
             }
         })
+    }
+
+    //上传回显百分比(暂时不写实现)
+    function writeProgress(evt) {
+        console.log(" evt : " + evt);
+        var loaded = evt.loaded;
+        var total = evt.total;
+        console.log(" loaded : " + loaded + " total : " + total);
     }
 </script>
