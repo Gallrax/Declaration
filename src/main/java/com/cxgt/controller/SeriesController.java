@@ -139,13 +139,15 @@ public class SeriesController extends BaseController {
     @RequiresPermissions("sys:series:updateStatus")
     @RequestMapping("/updateStatus")
     @ResponseBody
-    public Result updateStatus(Integer seriesId, Integer status, HttpServletRequest request) {
+    public Result updateStatus(Integer[] seriesIds, Integer status, HttpServletRequest request) {
         Site site = getSite(request);
-        Series series = seriesService.selectById(seriesId);
-        Assert.notNull(series);
-        Assert.isTrue(series.getSiteId().equals(site.getId()));
-        series.setStatus(status);
-        seriesService.updateById(series);
+//        Series series = seriesService.selectById(seriesId);
+        List<Series> seriesList = seriesService.selectList(new EntityWrapper<Series>().in("id", seriesIds));
+        for (Series series : seriesList) {
+            Assert.isTrue(series.getSiteId().equals(site.getId()));
+            series.setStatus(status);
+        }
+        seriesService.updateBatchById(seriesList);
         return ResultUtil.ok();
     }
 

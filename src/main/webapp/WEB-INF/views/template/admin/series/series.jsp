@@ -13,6 +13,18 @@
     <link rel="stylesheet" href="/static/tools/layui/css/layui.css" media="all"/>
 </head>
 <body class="layui-layout-body">
+<div class="layui-btn-group tableBox">
+    <button class="layui-btn" data-type="getCheckData">获取选中行数据</button>
+    <button class="layui-btn" data-type="getCheckLength">获取选中数目</button>
+    <button class="layui-btn" data-type="isAll">验证是否全选</button>
+    <shiro:hasAnyRoles name="auditor">
+        <button class="layui-btn" data-type="isAll">批量审核通过</button>
+        <button class="layui-btn" data-type="isAll">批量审核不通过</button>
+    </shiro:hasAnyRoles>
+    <shiro:hasAnyRoles name="specialist">
+        <button class="layui-btn" data-type="isAll">批量评奖</button>
+    </shiro:hasAnyRoles>
+</div>
 <div>
     <table id="series" class="layui-table" lay-filter="series">
     </table>
@@ -35,7 +47,8 @@
             url: "/series/series",
             page: true,
             cols: [[ //表头
-                {field: 'id', title: 'ID', fixed: 'left'},
+                {type: 'checkbox', fixed: 'left'},
+                {field: 'id', title: 'ID'},
                 {field: 'name', title: '名称'},
                 {field: 'phone', title: '联系方式'},
                 {field: 'company', title: '单位'},
@@ -79,6 +92,29 @@
                 detail(data);
             }
         });
+
+        $('.tableBox .layui-btn').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        var $ = layui.$;
+        var active = {
+            getCheckData: function () { //获取选中数据
+                var checkStatus = table.checkStatus('series')
+                    , data = checkStatus.data;
+                layer.alert(JSON.stringify(data));
+            }
+            , getCheckLength: function () { //获取选中数目
+                var checkStatus = table.checkStatus('series')
+                    , data = checkStatus.data;
+                layer.msg('选中了：' + data.length + ' 个');
+            }
+            , isAll: function () { //验证是否全选
+                var checkStatus = table.checkStatus('series');
+                layer.msg(checkStatus.isAll ? '全选' : '未全选')
+            }
+        };
     });
 </script>
 <script type="text/html" id="barDemo">

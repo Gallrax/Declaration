@@ -21,21 +21,21 @@
     <h1>运营管理平台登录</h1>
     <form class="layui-form">
         <div class="layui-form-item">
-            <input class="layui-input" name="account" placeholder="用户名" lay-verify="required" type="text"
+            <input class="layui-input" name="username" placeholder="用户名" lay-verify="required" type="text"
                    autocomplete="off" value="admin">
         </div>
         <div class="layui-form-item">
             <input class="layui-input" name="password" placeholder="密码" lay-verify="required" type="password"
                    autocomplete="off" value="123456">
         </div>
-        <div class="layui-form-item form_code">
+        <%--<div class="layui-form-item form_code">
             <input class="layui-input" name="captchaValue" placeholder="验证码" lay-verify="required|code" type="text"
                    autocomplete="off">
             <div class="code">
                 <img src="../../images/loading.gif" id="captchaImg" alt="点击刷新验证码" width="116" height="36"/>
             </div>
             <input type="hidden" name="captchaId" id="captchaId" value="0"/>
-        </div>
+        </div>--%>
         <button class="layui-btn login_btn" lay-submit="" lay-filter="login">登录</button>
     </form>
 </div>
