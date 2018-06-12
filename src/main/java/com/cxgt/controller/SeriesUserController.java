@@ -62,15 +62,30 @@ public class SeriesUserController extends BaseController {
     @RequiresPermissions("sys:series_user:update")
     @RequestMapping("/update")
     @ResponseBody
-    public Result update(SeriesUser seriesUser, HttpServletRequest request) {
-        Integer seriesUserId = seriesUser.getId();
-        SeriesUser tempSeriesUser = seriesUserService.selectById(seriesUserId);
-        Assert.notNull(tempSeriesUser);
-        User user = userService.selectById(tempSeriesUser.getUserId());
-        checkUser(tempSeriesUser.getUserId(), userService, request);
-        Series series = seriesService.selectById(seriesUser.getSeriesId());
-        checkSeries(series.getId(), seriesService, request);
-        seriesUserService.updateById(seriesUser);
+    public Result update(Integer[] seriesIds, String name, String reason, HttpServletRequest request) {
+        User user = getUser(request);
+        //后期可优化此部分至遍历处
+        for (Integer seriesId : seriesIds) {
+            checkSeries(seriesId, seriesService, request);
+        }
+        //方式1:不单个检查，直接查询，只检查结果数量是否一致
+        List<SeriesUser> seriesUsers = seriesUserService.selectList(new EntityWrapper<SeriesUser>().eq("user_id", user.getId()).in("series_id", seriesIds));
+        Assert.isTrue(seriesIds.length == seriesUsers.size());
+        for (SeriesUser seriesUser : seriesUsers) {
+            seriesUser.setName(name);
+        }
+        seriesUserService.updateBatchById(seriesUsers);
+        //方式2:单个检查，安全系数最高
+        /*for (Integer seriesId : seriesIds) {
+            Integer seriesUserId = seriesId;
+            SeriesUser tempSeriesUser = seriesUserService.selectById(seriesUserId);
+            Assert.notNull(tempSeriesUser);
+            checkUser(tempSeriesUser.getUserId(), userService, request);
+            Series series = seriesService.selectById(seriesId);
+            checkSeries(series.getId(), seriesService, request);
+            tempSeriesUser.setName(name);
+            seriesUserService.updateById(tempSeriesUser);
+        }*/
         return ResultUtil.ok();
     }
 

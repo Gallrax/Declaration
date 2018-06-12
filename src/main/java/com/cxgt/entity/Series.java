@@ -70,6 +70,10 @@ public class Series implements Serializable {
      * 附件
      */
 	private String enclosure;
+	/**
+     * 审核员审核原因
+     */
+	private String reason;
     /**
      * 点赞数
      */
@@ -208,6 +212,14 @@ public class Series implements Serializable {
 		this.enclosure = enclosure;
 	}
 
+	public String getReason() {
+		return reason;
+	}
+
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
+
 	public Integer getLikeCount() {
 		return likeCount;
 	}
@@ -288,6 +300,7 @@ public class Series implements Serializable {
 			", coverImg=" + coverImg +
 			", fileType=" + fileType +
 			", enclosure=" + enclosure +
+			", reason=" + reason +
 			", likeCount=" + likeCount +
 			", clickCount=" + clickCount +
 			", updateTime=" + updateTime +

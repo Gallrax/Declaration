@@ -7,22 +7,26 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page isELIgnored="false" %>
 <html>
 <head>
     <title>Title</title>
     <link rel="stylesheet" href="/static/tools/layui/css/layui.css" media="all"/>
 </head>
 <body class="layui-layout-body">
-<div class="layui-btn-group tableBox">
-    <button class="layui-btn" data-type="getCheckData">获取选中行数据</button>
-    <button class="layui-btn" data-type="getCheckLength">获取选中数目</button>
-    <button class="layui-btn" data-type="isAll">验证是否全选</button>
+<div class="tableBox">
+    <%-- 暂时隐藏搜索 --%>
+    <%--搜索：
+    <div class="layui-inline">
+        <input class="layui-input" name="id" id="demoReload" autocomplete="off">
+    </div>
+    <button class="layui-btn" data-type="reload">搜索</button>--%>
     <shiro:hasAnyRoles name="auditor">
-        <button class="layui-btn" data-type="isAll">批量审核通过</button>
-        <button class="layui-btn" data-type="isAll">批量审核不通过</button>
+        <button class="layui-btn" data-type="batchAudit">批量审核通过</button>
+        <button class="layui-btn" data-type="batchAudit">批量审核不通过</button>
     </shiro:hasAnyRoles>
     <shiro:hasAnyRoles name="specialist">
-        <button class="layui-btn" data-type="isAll">批量评奖</button>
+        <button class="layui-btn" data-type="batchAssess">批量评奖</button>
     </shiro:hasAnyRoles>
 </div>
 <div>
@@ -33,10 +37,26 @@
 </html>
 <script src="/static/tools/layui/layui.js"></script>
 <script src="/static/tools/layui/lay/modules/laytpl.js"></script>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
+    <shiro:hasAnyRoles name="auditor">
+        {{# if(d.status == 0){ }}
+        <a class="layui-btn layui-btn-xs" lay-event="audit">审核通过</a>
+        {{# } }}
+    </shiro:hasAnyRoles>
+    <shiro:hasAnyRoles name="specialist">
+        <a class="layui-btn layui-btn-xs" lay-event="assess">评分</a>
+    </shiro:hasAnyRoles>
+    <shiro:hasAnyRoles name="manager">
+        <a class="layui-btn layui-btn-xs" lay-event="distribute">分配</a>
+    </shiro:hasAnyRoles>
+
+</script>
 <script>
     var $;
     var table;
     var form;
+    var url;
     layui.use('table', function () {
         $ = layui.$;
         table = layui.table;
@@ -44,7 +64,7 @@
 
         table.render({
             elem: "#series",
-            url: "/series/series",
+            url: url,
             page: true,
             cols: [[ //表头
                 {type: 'checkbox', fixed: 'left'},
@@ -74,21 +94,27 @@
         });
 
         table.on('tool(series)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            console.log(obj);
             var data = obj.data; //获得当前行数据
             var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
-            var tr = obj.tr; //获得当前行 tr 的DOM对象
-
-            if (layEvent === 'audit') { //查看
-                layer.confirm('确定要通过审核么', function (index) {
-                    console.log(data.id);
-                    audit(data.id);
+            if (layEvent === 'audit') {
+                //审核
+                layer.prompt({title: '请输入内容'}, function (val, index) {
+                    var tempObj = new Object();
+                    tempObj.id = data.id;
+                    var tempObjs = new Object();
+                    tempObjs[0] = tempObj;
+                    audit(tempObjs, 1, val);
+                    layer.close(index);
                 });
             } else if (layEvent == 'assess') {
+                //评分
                 assess(data);
             } else if (layEvent === 'distribute') {
-                //审核通过
+                //分配
                 distribute(data);
             } else if (layEvent == 'detail') {
+                //查看
                 detail(data);
             }
         });
@@ -98,46 +124,39 @@
             active[type] ? active[type].call(this) : '';
         });
 
-        var $ = layui.$;
         var active = {
-            getCheckData: function () { //获取选中数据
-                var checkStatus = table.checkStatus('series')
-                    , data = checkStatus.data;
-                layer.alert(JSON.stringify(data));
-            }
-            , getCheckLength: function () { //获取选中数目
-                var checkStatus = table.checkStatus('series')
-                    , data = checkStatus.data;
-                layer.msg('选中了：' + data.length + ' 个');
-            }
-            , isAll: function () { //验证是否全选
-                var checkStatus = table.checkStatus('series');
-                layer.msg(checkStatus.isAll ? '全选' : '未全选')
+            batchAudit: function () {
+                var data = table.checkStatus('series').data;
+                if (data.length <= 0) {
+                    layer.alert("请选择内容");
+                    return false;
+                }
+                layer.prompt({title: '请输入内容'}, function (val, index) {
+                    audit(data, 1, val);
+                    layer.close(index);
+                });
+            },
+            batchNoAudit: function () {
+                var data = table.checkStatus('series').data;
+                if (data.length <= 0) {
+                    layer.alert("请选择内容");
+                    return false;
+                }
+                layer.prompt({title: '请输入内容'}, function (val, index) {
+                    audit(data, -1, val);
+                    layer.close(index);
+                });
+            },
+            batchAssess: function () {
+                var data = table.checkStatus('series').data;
+                if (data.length <= 0) {
+                    layer.alert("请选择内容");
+                    return false;
+                }
+                assess(data);
             }
         };
     });
-</script>
-<script type="text/html" id="barDemo">
-    <!-- 这里同样支持 laytpl 语法，如： -->
-
-    <%--<a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
-    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>--%>
-
-    <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
-
-    <shiro:hasAnyRoles name="auditor">
-        {{# if(d.status == 0){ }}
-        <a class="layui-btn layui-btn-xs" lay-event="audit">审核通过</a>
-        {{# } }}
-    </shiro:hasAnyRoles>
-    <shiro:hasAnyRoles name="specialist">
-        <a class="layui-btn layui-btn-xs" lay-event="assess">评分</a>
-    </shiro:hasAnyRoles>
-    <shiro:hasAnyRoles name="manager">
-        <a class="layui-btn layui-btn-xs" lay-event="distribute">分配</a>
-    </shiro:hasAnyRoles>
-
 </script>
 <script>
     function detail(data) {
@@ -156,9 +175,15 @@
 </script>
 <shiro:hasAnyRoles name="auditor">
     <script>
-        function audit(seriesId) {
+        url = "/series/series";
+        function audit(objs, status, reason) {
+            if (objs.length <= 0) return false;
+            var tempParam = "";
+            for (var i in objs) {
+                tempParam += "seriesIds=" + objs[i].id + "&";
+            }
             $.ajax({
-                url: "/series/updateStatus?seriesId=" + seriesId + "&status=1",
+                url: "/series/updateStatus?" + tempParam + "status=" + status + "&reason=" + reason,
                 type: "post",
                 success: function (data) {
                     console.log(data);
@@ -176,6 +201,7 @@
 </shiro:hasAnyRoles>
 <shiro:hasAnyRoles name="specialist">
     <script>
+        url = "/series/series?uid=" + ${SESSION_USER.id};
         function assess(data) {
             console.log(data);
             var seriesId = data.id;
@@ -207,6 +233,7 @@
 </shiro:hasAnyRoles>
 <shiro:hasAnyRoles name="manager">
     <script>
+        url = "/series/series";
         function distribute(data) {
             var seriesId = data.id;
             layer.open({

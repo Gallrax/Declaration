@@ -3,6 +3,7 @@ package com.cxgt.controller;
 
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -60,17 +61,20 @@ public class ActivityController extends BaseController {
                              Integer status,
                              String beginTime,
                              String endTime,
+                             String order,
                              Page<Activity> page,
                              HttpServletRequest request) {
         Site site = getSite(request);
         Wrapper<Activity> wrapper = new EntityWrapper<Activity>().eq("site_id", site.getId());
         User user = getUser(request);
-        if (ObjectUtil.isNotNull(status) && ObjectUtil.isNotNull(user)) {
+        /*if (ObjectUtil.isNotNull(status) && ObjectUtil.isNotNull(user)) {
             wrapper.eq("status", status);
         } else {
             wrapper.ne("status", GlobalConstant.STATUS_UNABLE);
+        }*/
+        if (ObjectUtil.isNull(user)) {
+            wrapper.ne("status", GlobalConstant.STATUS_UNABLE);
         }
-
         if (ObjectUtil.isNotNull(categoryId)) {
             Category category = categoryService.selectById(categoryId);
             boolean equals = category.getSiteId().equals(site.getId());
@@ -79,6 +83,7 @@ public class ActivityController extends BaseController {
             childrenIds.add(categoryId);
             wrapper.in("category_id", childrenIds);
         }
+        wrapper.orderBy(StrUtil.isNotEmpty(order) ? order : "id", false);
         //TODO: search search beginTime endTime 需求待定(后台开发再考虑)
         Page<Activity> activityPage = activityService.selectPage(page, wrapper);
         return ResultUtil.ok(activityPage);
@@ -110,6 +115,28 @@ public class ActivityController extends BaseController {
         activity.setInsertTime(date);
         activity.setInsertTimeMs(date.getTime());
         activityService.insert(activity);
+        return ResultUtil.ok();
+    }
+
+    @SimpleLog
+    @RequiresPermissions("sys:activity:insert")
+    @RequestMapping("/updateStatus")
+    @ResponseBody
+    public Result updateStatus(Integer[] activityIds, Integer status, HttpServletRequest request) {
+        Assert.notNull(status);
+        Assert.isTrue(status.equals(GlobalConstant.STATUS_UNABLE) ||
+                status.equals(GlobalConstant.STATUS_ABLE) ||
+                status.equals(GlobalConstant.STATUS_ABLE_UNDO) ||
+                status.equals(GlobalConstant.STATUS_DEFAULT));
+        //后期可优化此部分至遍历处
+        for (Integer activityId : activityIds) {
+            checkActivity(activityId, activityService, request);
+        }
+        List<Activity> activityList = activityService.selectList(new EntityWrapper<Activity>().in("id", activityIds));
+        for (Activity activity : activityList) {
+            activity.setStatus(status);
+        }
+        activityService.updateBatchById(activityList);
         return ResultUtil.ok();
     }
 

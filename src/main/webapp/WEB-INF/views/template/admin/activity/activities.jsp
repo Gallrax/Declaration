@@ -12,23 +12,35 @@
     <link rel="stylesheet" href="/static/tools/layui/css/layui.css" media="all"/>
 </head>
 <body class="layui-layout-body">
+<div class="tableBox">
+    <button class="layui-btn" data-type="add">添加</button>
+    <%--<button class="layui-btn" data-type="batchUpdateStatus">批量上架</button>
+    <button class="layui-btn" data-type="batchUpdateStatus">批量下架</button>--%>
+</div>
 <div>
-    <div>
-        <button class="layui-btn layuiadmin-btn-tags" data-type="add">添加</button>
-    </div>
-    <table id="series" class="layui-table" lay-filter="series">
+    <table id="activities" class="layui-table" lay-filter="activities">
     </table>
 </div>
 </body>
 </html>
 <script src="/static/tools/layui/layui.js"></script>
+<script type="text/html" id="barDemo">
+    {{#  if(d.status == 0){ }}
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="update" data-type="-1">下架</a>
+    {{#  } }}
+    {{#  if(d.status == -1){ }}
+    <a class="layui-btn layui-btn-xs" lay-event="update" data-type="0">上架</a>
+    {{#  } }}
+</script>
 <script>
-
+    var $;
+    var table;
     layui.use('table', function () {
-        var table = layui.table;
+        $ = layui.$;
+        table = layui.table;
 
         table.render({
-            elem: "#series",
+            elem: "#activities",
             url: "/activity/activities",
             page: true,
             cols: [[ //表头
@@ -38,8 +50,8 @@
                 {field: 'place', title: '地点'},
                 {field: 'hoster', title: '发起者'},
                 {field: 'beginTime', title: '开始时间'},
-                {field: 'endTime', title: '结束时间'}
-                // {field: 'tool', title: '操作', toolbar: '#barDemo'}
+                {field: 'endTime', title: '结束时间'},
+                {field: 'tool', title: '操作', toolbar: '#barDemo'}
             ]],
             request: {
                 pageName: 'current',
@@ -58,36 +70,23 @@
             }
         });
 
-        table.on('tool(series)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+        table.on('tool(activities)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
             var data = obj.data; //获得当前行数据
             var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
-            var tr = obj.tr; //获得当前行 tr 的DOM对象
 
-            if (layEvent === 'detail') { //查看
-                console.log(data);
-                //do somehing
-            } else if (layEvent === 'del') { //删除
-                layer.confirm('真的删除行么', function (index) {
-                    obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-                    layer.close(index);
-                    //向服务端发送删除指令
-                });
-            } else if (layEvent === 'edit') { //编辑
-                //do something
-                console.log(data);
-                //同步更新缓存对应的值
-                obj.update({
-                    username: '123'
-                    , title: 'xxx'
+            if (layEvent === 'update') { //更新状态
+                var status = $(this).data('type');
+                layer.confirm("确定" + (status == 0 ? "上架吗？" : "下架吗？"), function (val, index) {
+                    var tempObj = new Object();
+                    tempObj.id = data.id;
+                    var tempObjs = new Object();
+                    tempObjs[0] = tempObj;
+                    updateStatus(tempObjs, status);
                 });
             }
         });
-    });
 
-    layui.use('layer', function () {
-        var $ = layui.$;
-
-        $('.layui-btn.layuiadmin-btn-tags').on('click', function () {
+        $('.tableBox .layui-btn').on('click', function () {
             var type = $(this).data('type');
             active[type] ? active[type].call(this) : '';
         });
@@ -101,16 +100,31 @@
                     content: '/admin/activity/addActivity.html'
                 });
             }
-        }
-    });
-</script>
-<script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
-    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        };
 
-    <!-- 这里同样支持 laytpl 语法，如： -->
-    {{#  if(d.status == 0){ }}
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-    <a class="layui-btn layui-btn-xs" lay-event="check">审核</a>
-    {{#  } }}
+    });
+
+</script>
+<script>
+    function updateStatus(objs, status) {
+        if (objs.length <= 0) return false;
+        var tempParam = "";
+        for (var i in objs) {
+            tempParam += "activityIds=" + objs[i].id + "&";
+        }
+        $.ajax({
+            url: "/activity/updateStatus?" + tempParam + "status=" + status,
+            type: "post",
+            success: function (data) {
+                console.log(data);
+                var result = $.parseJSON(data);
+                if (result.code == 200) {
+                    layer.msg("操作成功");
+                    table.reload("activities");
+                } else {
+                    layer.msg("操作失败");
+                }
+            }
+        })
+    }
 </script>

@@ -3,6 +3,7 @@ package com.cxgt.controller;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
@@ -15,10 +16,7 @@ import com.cxgt.commmon.controller.BaseController;
 import com.cxgt.commmon.util.ResultUtil;
 import com.cxgt.commmon.vo.Result;
 import com.cxgt.entity.*;
-import com.cxgt.service.ActivityService;
-import com.cxgt.service.CategoryService;
-import com.cxgt.service.ResourceService;
-import com.cxgt.service.SeriesService;
+import com.cxgt.service.*;
 import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,11 +44,15 @@ public class SeriesController extends BaseController {
     @Autowired
     private SeriesService seriesService;
     @Autowired
+    private SeriesUserService seriesUserService;
+    @Autowired
     private CategoryService categoryService;
     @Autowired
     private ActivityService activityService;
     @Autowired
     private ResourceService resourceService;
+    @Autowired
+    private UserService userService;
 
     @SimpleLog
     @RequestMapping("/series")
@@ -60,6 +62,7 @@ public class SeriesController extends BaseController {
                          Integer uid,
                          Integer status,
                          String search,
+                         String order,
                          Page page,
                          HttpServletRequest request) {
         Site site = getSite(request);
@@ -83,9 +86,18 @@ public class SeriesController extends BaseController {
                 return ResultUtil.ok(page);
             }
         }
+        if (ObjectUtil.isNotNull(uid) && checkUser(uid, userService, request)) {
+            List<SeriesUser> seriesUsers = seriesUserService.selectList(new EntityWrapper<SeriesUser>().eq("user_id", uid));
+            List<Integer> seriesIds = new ArrayList<>();
+            for (SeriesUser seriesUser : seriesUsers) {
+                seriesIds.add(seriesUser.getSeriesId());
+            }
+            wrapper.in("id", seriesIds);
+        }
         //前台只能查审核通过的。后台默认查所有
         if (ObjectUtil.isNull(user) || (ObjectUtil.isNotNull(status) && ObjectUtil.isNotNull(user)))
             wrapper.eq("status", ObjectUtil.isNotNull(status) && ObjectUtil.isNotNull(user) ? status : GlobalConstant.STATUS_ABLE);
+        wrapper.orderBy(StrUtil.isNotEmpty(order) ? order : "id", false);
         //TODO:uid search 需求待定(后台开发再考虑)
         Page<Series> seriesPage = seriesService.selectPage(page, wrapper.orderBy("id", false));
         return ResultUtil.ok(seriesPage);
@@ -139,13 +151,20 @@ public class SeriesController extends BaseController {
     @RequiresPermissions("sys:series:updateStatus")
     @RequestMapping("/updateStatus")
     @ResponseBody
-    public Result updateStatus(Integer[] seriesIds, Integer status, HttpServletRequest request) {
+    public Result updateStatus(Integer[] seriesIds, Integer status, String reason, HttpServletRequest request) {
+        ArrayUtil.isNotEmpty(seriesIds);
+        Assert.notNull(status);
+        Assert.isTrue(status.equals(GlobalConstant.STATUS_UNABLE) ||
+                status.equals(GlobalConstant.STATUS_ABLE) ||
+                status.equals(GlobalConstant.STATUS_ABLE_UNDO) ||
+                status.equals(GlobalConstant.STATUS_DEFAULT));
         Site site = getSite(request);
 //        Series series = seriesService.selectById(seriesId);
         List<Series> seriesList = seriesService.selectList(new EntityWrapper<Series>().in("id", seriesIds));
         for (Series series : seriesList) {
             Assert.isTrue(series.getSiteId().equals(site.getId()));
             series.setStatus(status);
+            series.setReason(reason);
         }
         seriesService.updateBatchById(seriesList);
         return ResultUtil.ok();

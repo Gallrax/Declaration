@@ -39,13 +39,13 @@
         <div class="layui-form-item">
             <label class="layui-form-label">开始时间</label>
             <div class="layui-input-block">
-                <input type="date" name="beginTime" class="layui-date">
+                <input type="date" name="beginTime" lay-verify="required" class="layui-date">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">结束时间</label>
             <div class="layui-input-block">
-                <input type="date" name="endTime" class="layui-date">
+                <input type="date" name="endTime" lay-verify="required" class="layui-date">
             </div>
         </div>
         <div class="layui-form-item">
