@@ -45,7 +45,7 @@
         {{# } }}
     </shiro:hasAnyRoles>
     <shiro:hasAnyRoles name="specialist">
-        <a class="layui-btn layui-btn-xs" lay-event="assess">评分</a>
+        <a class="layui-btn layui-btn-xs" lay-event="assess">评奖</a>
     </shiro:hasAnyRoles>
     <shiro:hasAnyRoles name="manager">
         <a class="layui-btn layui-btn-xs" lay-event="distribute">分配</a>
@@ -94,7 +94,6 @@
         });
 
         table.on('tool(series)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
-            console.log(obj);
             var data = obj.data; //获得当前行数据
             var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
             if (layEvent === 'audit') {
@@ -109,7 +108,11 @@
                 });
             } else if (layEvent == 'assess') {
                 //评分
-                assess(data);
+                var tempObj = new Object();
+                tempObj.id = data.id;
+                var tempObjs = new Object();
+                tempObjs[0] = tempObj;
+                assess(tempObjs);
             } else if (layEvent === 'distribute') {
                 //分配
                 distribute(data);
@@ -162,20 +165,45 @@
     function detail(data) {
         var seriesId = data.id;
         $.ajax({
+            url: "/series/" + seriesId,
+            type: "get",
+            success: function (data) {
+                var result = $.parseJSON(data);
+                var activityId = result.data.activityId;
+                if (result.code == 200) {
+                    $.ajax({
+                        url: "/activity/" + activityId,
+                        type: "get",
+                        success: function (data) {
+                            var result = $.parseJSON(data);
+                            var categoryId = result.data.categoryId;
+                            console.log(" seriesId : " + seriesId);
+                            console.log(" activityId : " + activityId);
+                            console.log(" categoryId : " + categoryId);
+                            window.open("/index.html?type=2&categoryId=" + categoryId + "&activityId=" + activityId + "&seriesId=" + seriesId + "&url=/seriesInfo.html");
+                        }
+                    })
+                }
+            }
+        })
+        //取消显示奖项
+        /*$.ajax({
             url: "/seriesUser/" + seriesId,
             type: "get",
             success: function (data) {
                 var result = $.parseJSON(data);
+                console.log(result);
                 if (result.code == 200) {
                     layer.msg(result.data.name);
                 }
             }
-        })
+        })*/
     }
 </script>
 <shiro:hasAnyRoles name="auditor">
     <script>
         url = "/series/series";
+
         function audit(objs, status, reason) {
             if (objs.length <= 0) return false;
             var tempParam = "";
@@ -202,38 +230,30 @@
 <shiro:hasAnyRoles name="specialist">
     <script>
         url = "/series/series?uid=" + ${SESSION_USER.id};
+
         function assess(data) {
             console.log(data);
-            var seriesId = data.id;
-            $.ajax({
-                url: "/seriesUser/" + seriesId,
-                type: "get",
-                success: function (data) {
-                    var result = $.parseJSON(data);
-                    console.log(result);
-                    if (result.code == 200) {
-                        layer.open({
-                            type: 2,
-                            area: ['50%', '50%'],
-                            title: '评奖',
-                            content: '/admin/seriesUser/updateSeriesUser.html', //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
-                            success: function (layero, index) {
-                                var body = layer.getChildFrame('body', index);
-                                body.find('#seriesUserId').val(result.data.id);
-                                body.find('#seriesId').val(seriesId);
-                            }
-                        });
-                    } else {
-                        layer.msg(result.message);
+            layer.open({
+                type: 2,
+                area: ['50%', '50%'],
+                title: '评奖',
+                content: '/admin/seriesUser/updateSeriesUser.html', //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                success: function (layero, index) {
+                    var body = layer.getChildFrame('body', index);
+                    var tempStr = "";
+                    for (var i in data) {
+                        tempStr += "<input type=\"checkbox\" name=\"seriesIds\" value=\"" + data[i].id + "\" checked=\"checked\" style=\"display: none\">";
                     }
+                    body.find('#tempDiv').append(tempStr);
                 }
-            })
+            });
         }
     </script>
 </shiro:hasAnyRoles>
 <shiro:hasAnyRoles name="manager">
     <script>
         url = "/series/series";
+
         function distribute(data) {
             var seriesId = data.id;
             layer.open({

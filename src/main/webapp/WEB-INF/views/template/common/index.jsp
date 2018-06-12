@@ -38,11 +38,19 @@
     var globalCategoryId;
     var globalActivityId;
     var globalSeriesId;
-    var globalPageIndex;
+    var globalPageIndex = 1;
 
     //加载分类数据
     $(function () {
         type = getUrlParam("type");
+        var url = getUrlParam("url");
+        console.log(url);
+        if (url != null || url != '') {
+            globalCategoryId = getUrlParam("categoryId");
+            globalActivityId = getUrlParam("activityId");
+            globalSeriesId = getUrlParam("seriesId");
+        }
+        changeDiv(url);
         writeCategory();
     });
 

@@ -14,8 +14,9 @@
 <body class="layui-layout-body">
 <div>
     <form class="layui-form" style="width: 70%">
-        <input type="hidden" name="id" id="seriesUserId">
-        <input type="hidden" name="seriesIds" id="seriesId">
+        <div id="tempDiv" style="display: none">
+        <%--<input type="hidden" name="seriesIds" id="seriesId">--%>
+        </div>
         <div class="layui-form-item">
             <label class="layui-form-label">奖项名称</label>
             <div class="layui-input-block">
@@ -24,9 +25,9 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">奖项类型</label>
+            <label class="layui-form-label">奖项评语</label>
             <div class="layui-input-block">
-                <input type="text" name="type" placeholder="请输入" lay-verify="required" autocomplete="off"
+                <input type="text" name="reason" placeholder="请输入" lay-verify="required" autocomplete="off"
                        class="layui-input">
             </div>
         </div>
@@ -47,11 +48,12 @@
         var form = layui.form;
 
         form.on('submit(*)', function (data) {
-            console.log(data);
+            console.log(data);//无法传数组
+            console.log($(".layui-form").serialize());//可以传数组
             $.ajax({
                 url: "/seriesUser/update",
                 type: "post",
-                data: data.field,
+                data: $(".layui-form").serialize(),
                 success: function (data) {
                     var result = $.parseJSON(data);
                     if (result.code == 200) {

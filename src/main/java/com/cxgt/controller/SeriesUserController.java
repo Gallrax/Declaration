@@ -73,6 +73,7 @@ public class SeriesUserController extends BaseController {
         Assert.isTrue(seriesIds.length == seriesUsers.size());
         for (SeriesUser seriesUser : seriesUsers) {
             seriesUser.setName(name);
+            seriesUser.setReason(reason);
         }
         seriesUserService.updateBatchById(seriesUsers);
         //方式2:单个检查，安全系数最高
